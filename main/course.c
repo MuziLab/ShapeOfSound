@@ -646,13 +646,30 @@ void task_2(int*x,int*y,int length_of_x)
     //printf("\n");
 }
 
+void task_4(int*x,int*y,int length_of_x,RGB_struct*rgb_input)
+{
+    RGB_struct input_data_all[LIGHT_NUMBER] = {0}; // 所有灯的要输入的信息
+    for (size_t i = 0; i < length_of_x; i++)
+    {   
+        if (y[i]<0||x[i]<0)
+        {   
+            RGB_struct input_data_all[LIGHT_NUMBER] = {0};
+            break;
+        }
+        change_the_form_and_package_point(rgb_input[i], x[i], input_data_all, y[i]);
+    }
+    
+
+    lighter(input_data_all);
+
+}
 
 
 int length_of_tail = 2;//尾巴长度,从1开始
 int x_array[512] = {0};
 int y_array[512] = {0};
 int coordinate_count = 0;
-
+RGB_struct rgb_store[512] = {0};
 
 
 
@@ -687,6 +704,18 @@ void mode_function(int mode_number)
         {
         }
         break;
+    case 4:
+        task_3();
+        vTaskSuspend(task_1_music_show);
+        vTaskSuspend(task_1_1_music_get_number);
+        memset(x_array,0,sizeof(x_array));
+        memset(y_array,0,sizeof(y_array));
+        memset(rgb_store,0,sizeof(rgb_store));
+        coordinate_count = 0;
+        if (xQueueReset(xQueue) != pdPASS) 
+        {
+        }
+        break; 
     default:
         break;
     }
@@ -700,7 +729,12 @@ static void recv_from_android(const int sock)
     //下面规定通信方法,首先模式切换就是改mode_number,2模式有两个数,2和4.在模式1中,需要通信的点是保存数据,发来的数据有两个类型,A和B,其中A需要保存
     //模式二有两个,2或者是4,其中2模式是尾迹模式,接受到的数据有尾巴长度,这个用字母D,还有X,Y轴坐标,这个用F,后两位表示x和y,还有清除标志字母C,
     //要实现的功能是根据尾巴长度设置数组大小并持续接受信号,在屏幕上显示轨迹,先用红色吧,因为tcp的可靠性,不担心出问题,
-    //模式4是
+    //模式4是模式2.2,这个模式有坐标,清除,撤销,rgb,没了应该,实现了的功能是,点击和移动一样,都是把显示一个灯(add_light)和其他已有的灯(store_light),然后松开是把这个灯
+    //加到已有灯上面,点击清除和撤销的话就是把仓库清零,和仓库最后一个清0
+    //通信规定是坐标一样F,rgb用G,清除用C,和之前的一样,撤销用H,好,上午到这,今天上午就把昨天写的bug变成程序了
+    //程序是这样,读取坐标,并显示这个坐标和仓库的值,当松手时,即收到"I"时把这个坐标加进仓库
+    //改进,手机在进行模式4时,为默认rgb,默认rgb为蓝色,然后用默认rgb进行显示这个坐标的数,当抬手时,会发送一个I,这时候count就+1,如果这时候收到rgb值,
+    //就会把改rgb_store的值的count-1改,并显示
     int len;
     char rx_buffer[128];
  
@@ -768,15 +802,43 @@ static void recv_from_android(const int sock)
                     
                     x_array[coordinate_count] = rx_buffer[i+1]-90;
                     y_array[coordinate_count] = rx_buffer[i+2]-90;
-                    printf("%d||%d\n",x_array[coordinate_count],y_array[coordinate_count]);
                     coordinate_count++;
                     task_2(x_array,y_array,length_of_tail);
+                    printf("test********************\n");
                 }
                 if (coordinate_count>=length_of_tail)
                 {
                     coordinate_count = 0;
                 }
                 
+                case 4:
+                switch (rx_buffer[i])
+                {
+                case 'G':
+                if (coordinate_count>0)
+                {
+                    rgb_store[coordinate_count-1].red = rx_buffer[i+1]-90;
+                    rgb_store[coordinate_count-1].green = rx_buffer[i+2]-90;
+                    rgb_store[coordinate_count-1].blue = rx_buffer[i+3]-90;
+                    task_4(x_array,y_array,coordinate_count-1,rgb_store);
+                }
+                
+
+                    break;
+                case 'F':
+                    x_array[coordinate_count] = rx_buffer[i+1]-90;
+                    y_array[coordinate_count] = rx_buffer[i+2]-90;
+                    task_4(x_array,y_array,coordinate_count,rgb_store);
+                break;
+                
+                case 'I':
+                    coordinate_count++;
+                break;
+
+                default:
+                    break;
+                }
+                    break;  
                 
 
 

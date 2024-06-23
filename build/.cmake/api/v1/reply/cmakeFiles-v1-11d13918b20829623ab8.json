@@ -940,6 +940,20 @@
 			"path" : "D:/ESP2/Espressif/tools/cmake/3.24.0/share/cmake-3.24/Modules/CMakeTestASMCompiler.cmake"
 		},
 		{
+			"path" : ".git/HEAD"
+		},
+		{
+			"isExternal" : true,
+			"path" : "D:/ESP/tools/cmake/third_party/GetGitRevisionDescription.cmake.in"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "build/CMakeFiles/git-data/grabRef.cmake"
+		},
+		{
+			"path" : ".git/refs/heads/main"
+		},
+		{
 			"isExternal" : true,
 			"path" : "D:/ESP/tools/kconfig_new/config.env.in"
 		},

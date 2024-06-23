@@ -1749,7 +1749,7 @@
 				{
 					"directoryIndex" : 14,
 					"id" : "__idf_esp_app_format::@08c2bdce7fd85cdbea06",
-					"jsonFile" : "target-__idf_esp_app_format-0829c31262dfa2787752.json",
+					"jsonFile" : "target-__idf_esp_app_format-16fb76a0b47a2b16e6ec.json",
 					"name" : "__idf_esp_app_format",
 					"projectIndex" : 1
 				},
@@ -1973,7 +1973,7 @@
 				{
 					"directoryIndex" : 86,
 					"id" : "__idf_main::@7368607ed66887415643",
-					"jsonFile" : "target-__idf_main-86b9f2fb54016214308d.json",
+					"jsonFile" : "target-__idf_main-e1cfebbd819acbbe0050.json",
 					"name" : "__idf_main",
 					"projectIndex" : 1
 				},
@@ -2141,7 +2141,7 @@
 				{
 					"directoryIndex" : 24,
 					"id" : "__ldgen_output_sections.ld::@874df54e61e20112dfd4",
-					"jsonFile" : "target-__ldgen_output_sections.ld-6a806c6abb12004b97d2.json",
+					"jsonFile" : "target-__ldgen_output_sections.ld-eabb4ef9f563ef476584.json",
 					"name" : "__ldgen_output_sections.ld",
 					"projectIndex" : 1
 				},
@@ -2204,7 +2204,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "course-project.elf::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-course-project.elf-92ceeca624cce9c707bb.json",
+					"jsonFile" : "target-course-project.elf-ae228bd0eadba40eed13.json",
 					"name" : "course-project.elf",
 					"projectIndex" : 0
 				},
@@ -2218,7 +2218,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "dfu::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-dfu-dee8dcb5c4f5bebcb988.json",
+					"jsonFile" : "target-dfu-5dfc13ea3dda2e9e1f00.json",
 					"name" : "dfu",
 					"projectIndex" : 0
 				},
@@ -2316,7 +2316,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "flash::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-flash-fcc441be8f449fddd2e0.json",
+					"jsonFile" : "target-flash-49e3145bf02862f2b18d.json",
 					"name" : "flash",
 					"projectIndex" : 0
 				},
@@ -2463,7 +2463,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "uf2::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-uf2-e8f71f31071512a5698a.json",
+					"jsonFile" : "target-uf2-0ddadcf354599baf8fe0.json",
 					"name" : "uf2",
 					"projectIndex" : 0
 				},
