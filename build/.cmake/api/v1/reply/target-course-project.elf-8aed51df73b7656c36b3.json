@@ -1587,16 +1587,12 @@
 			"id" : "__idf_console::@4311ed8d271cc0ee1422"
 		},
 		{
+			"backtrace" : 52,
+			"id" : "__idf_esp_hid::@15df40e16a5d8775dd9b"
+		},
+		{
 			"backtrace" : 57,
 			"id" : "__idf_esp_lcd::@d5a84597e1633c9ab0d3"
-		},
-		{
-			"backtrace" : 61,
-			"id" : "__idf_espcoredump::@718b9a7d55ab42cfc0a3"
-		},
-		{
-			"backtrace" : 60,
-			"id" : "__idf_esp_local_ctrl::@d6aad58d2946e56208ef"
 		},
 		{
 			"backtrace" : 58,
@@ -1607,6 +1603,14 @@
 			"id" : "__idf_protocomm::@d76d01c8dec06205e1fc"
 		},
 		{
+			"backtrace" : 60,
+			"id" : "__idf_esp_local_ctrl::@d6aad58d2946e56208ef"
+		},
+		{
+			"backtrace" : 61,
+			"id" : "__idf_espcoredump::@718b9a7d55ab42cfc0a3"
+		},
+		{
 			"backtrace" : 62,
 			"id" : "__idf_wear_levelling::@cb21b0d7c0815cff11c6"
 		},
@@ -1615,24 +1619,16 @@
 			"id" : "__idf_sdmmc::@89ed5bca1750ffbc7db6"
 		},
 		{
-			"backtrace" : 52,
-			"id" : "__idf_esp_hid::@15df40e16a5d8775dd9b"
-		},
-		{
 			"backtrace" : 64,
 			"id" : "__idf_fatfs::@75ac1d9b25dacc8cc9e7"
-		},
-		{
-			"backtrace" : 66,
-			"id" : "__idf_mqtt::@c1ab2c6a99226d1f4b56"
 		},
 		{
 			"backtrace" : 65,
 			"id" : "__idf_json::@c78a8bdc820334f01148"
 		},
 		{
-			"backtrace" : 69,
-			"id" : "__idf_touch_element::@01c672d9a2e23f1d367f"
+			"backtrace" : 66,
+			"id" : "__idf_mqtt::@c1ab2c6a99226d1f4b56"
 		},
 		{
 			"backtrace" : 68,
@@ -1643,16 +1639,20 @@
 			"id" : "__idf_perfmon::@aac0f647c32bb8f54a67"
 		},
 		{
-			"backtrace" : 73,
-			"id" : "__idf_main::@7368607ed66887415643"
-		},
-		{
 			"backtrace" : 71,
 			"id" : "__idf_usb::@4a2418067d0bb57af462"
 		},
 		{
+			"backtrace" : 69,
+			"id" : "__idf_touch_element::@01c672d9a2e23f1d367f"
+		},
+		{
 			"backtrace" : 72,
 			"id" : "__idf_wifi_provisioning::@9d7e7ffe1b15746c1098"
+		},
+		{
+			"backtrace" : 73,
+			"id" : "__idf_main::@7368607ed66887415643"
 		},
 		{
 			"backtrace" : 73,
