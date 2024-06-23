@@ -1591,10 +1591,6 @@
 			"id" : "__idf_esp_hid::@15df40e16a5d8775dd9b"
 		},
 		{
-			"backtrace" : 57,
-			"id" : "__idf_esp_lcd::@d5a84597e1633c9ab0d3"
-		},
-		{
 			"backtrace" : 59,
 			"id" : "__idf_protocomm::@d76d01c8dec06205e1fc"
 		},
@@ -1603,8 +1599,16 @@
 			"id" : "__idf_protobuf-c::@b14513c4bd859268ec22"
 		},
 		{
+			"backtrace" : 57,
+			"id" : "__idf_esp_lcd::@d5a84597e1633c9ab0d3"
+		},
+		{
 			"backtrace" : 60,
 			"id" : "__idf_esp_local_ctrl::@d6aad58d2946e56208ef"
+		},
+		{
+			"backtrace" : 61,
+			"id" : "__idf_espcoredump::@718b9a7d55ab42cfc0a3"
 		},
 		{
 			"backtrace" : 63,
@@ -1615,10 +1619,6 @@
 			"id" : "__idf_wear_levelling::@cb21b0d7c0815cff11c6"
 		},
 		{
-			"backtrace" : 61,
-			"id" : "__idf_espcoredump::@718b9a7d55ab42cfc0a3"
-		},
-		{
 			"backtrace" : 64,
 			"id" : "__idf_fatfs::@75ac1d9b25dacc8cc9e7"
 		},
@@ -1627,28 +1627,24 @@
 			"id" : "__idf_json::@c78a8bdc820334f01148"
 		},
 		{
-			"backtrace" : 66,
-			"id" : "__idf_mqtt::@c1ab2c6a99226d1f4b56"
-		},
-		{
-			"backtrace" : 69,
-			"id" : "__idf_touch_element::@01c672d9a2e23f1d367f"
-		},
-		{
 			"backtrace" : 67,
 			"id" : "__idf_perfmon::@aac0f647c32bb8f54a67"
+		},
+		{
+			"backtrace" : 66,
+			"id" : "__idf_mqtt::@c1ab2c6a99226d1f4b56"
 		},
 		{
 			"backtrace" : 68,
 			"id" : "__idf_spiffs::@df881b71474064c86689"
 		},
 		{
-			"backtrace" : 71,
-			"id" : "__idf_usb::@4a2418067d0bb57af462"
+			"backtrace" : 69,
+			"id" : "__idf_touch_element::@01c672d9a2e23f1d367f"
 		},
 		{
-			"backtrace" : 73,
-			"id" : "__idf_protocol_examples_common::@f775e6a13b1007a4569f"
+			"backtrace" : 71,
+			"id" : "__idf_usb::@4a2418067d0bb57af462"
 		},
 		{
 			"backtrace" : 72,
@@ -1657,6 +1653,10 @@
 		{
 			"backtrace" : 73,
 			"id" : "__idf_main::@7368607ed66887415643"
+		},
+		{
+			"backtrace" : 73,
+			"id" : "__idf_protocol_examples_common::@f775e6a13b1007a4569f"
 		}
 	],
 	"id" : "course-project.elf::@6890427a1f51a3e7e1df",

@@ -680,6 +680,7 @@ int length_of_tail = 2;//尾巴长度,从1开始
 int x_array[512] = {0};
 int y_array[512] = {0};
 int coordinate_count = 0;
+RGB_struct get_rgb ={0};
 RGB_struct rgb_store[512] = {0};
 
 
@@ -759,6 +760,7 @@ static void recv_from_android(const int sock)
             ESP_LOGW(TAG, "Connection closed");
         } else {
             rx_buffer[len] = 0; // str的结束标志,将所有发来的东西用str处理,这样方便管理
+            printf(rx_buffer);
             for (size_t i = 0; i < len; i++)
             {   
                 if (rx_buffer[i]=='M')
@@ -770,7 +772,6 @@ static void recv_from_android(const int sock)
                 if (rx_buffer[i]=='L')
                 {
                     light_coefficient = (uint8_t) rx_buffer[i+1]-90;
-                    //printf("%d*********************\n",light_coefficient);
                 }
                 
                 
@@ -813,8 +814,8 @@ static void recv_from_android(const int sock)
                 if (rx_buffer[i]=='F')
                 {
                     
-                    x_array[coordinate_count] = rx_buffer[i+1]-90;
-                    y_array[coordinate_count] = rx_buffer[i+2]-90;
+                    x_array[coordinate_count] = rx_buffer[i+1]-91;
+                    y_array[coordinate_count] = rx_buffer[i+2]-91;
                     coordinate_count++;
                     task_2(x_array,y_array,length_of_tail);
                 }
@@ -828,24 +829,43 @@ static void recv_from_android(const int sock)
                 {
                 case 'G':
                 if (coordinate_count>0)
-                {
-                    rgb_store[coordinate_count-1].red = rx_buffer[i+1]-90;
-                    rgb_store[coordinate_count-1].green = rx_buffer[i+2]-90;
-                    rgb_store[coordinate_count-1].blue = rx_buffer[i+3]-90;
-                    task_4(x_array,y_array,coordinate_count-1,rgb_store);
+                {   
+                    get_rgb.red =(rx_buffer[i+1]-90);
+                    get_rgb.green =(rx_buffer[i+2]-90);
+                    get_rgb.blue =(rx_buffer[i+3]-90);
+                    rgb_store[coordinate_count-1].red = get_rgb.red*light_coefficient;
+                    rgb_store[coordinate_count-1].green = get_rgb.green*light_coefficient;
+                    rgb_store[coordinate_count-1].blue = get_rgb.blue*light_coefficient;
+                    task_4(x_array,y_array,coordinate_count,rgb_store);
                 }
                 
 
                     break;
                 case 'F':
-                    x_array[coordinate_count] = rx_buffer[i+1]-90;
-                    y_array[coordinate_count] = rx_buffer[i+2]-90;
-                    task_4(x_array,y_array,coordinate_count,rgb_store);
+                    x_array[coordinate_count] = rx_buffer[i+1]-91;
+                    y_array[coordinate_count] = rx_buffer[i+2]-91;
+                    if (coordinate_count == 0)
+                    {
+                        get_rgb.blue = 15*light_coefficient;
+                    }
+                    
+                    rgb_store[coordinate_count] = get_rgb;
+                    task_4(x_array,y_array,coordinate_count+1,rgb_store);
                 break;
                 
                 case 'I':
                     coordinate_count++;
+
                 break;
+                case 'L':
+                    rgb_store[coordinate_count-1].red = get_rgb.red*light_coefficient;
+                    rgb_store[coordinate_count-1].green = get_rgb.green*light_coefficient;
+                    rgb_store[coordinate_count-1].blue = get_rgb.blue*light_coefficient;
+                    task_4(x_array,y_array,coordinate_count,rgb_store);
+                break;
+                
+                //还有撤回按键要弄,看样子明天还得干.
+
 
                 default:
                     break;
