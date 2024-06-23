@@ -144,9 +144,9 @@ void read_from_flash_uint8(uint8_t* addr_1,uint8_t* addr_2,uint8_t* addr_3,uint8
     nvs_open("storage",NVS_READONLY,&nvs_handle_1);
     nvs_get_u8(nvs_handle_1,"number1",addr_1);
     nvs_get_u8(nvs_handle_1,"number2",addr_2);
-    nvs_get_u8(nvs_handle_1,"number2",addr_3);
-    nvs_get_u8(nvs_handle_1,"number2",addr_4);
-    nvs_get_u8(nvs_handle_1,"number2",addr_5);
+    nvs_get_u8(nvs_handle_1,"number3",addr_3);
+    nvs_get_u8(nvs_handle_1,"number4",addr_4);
+    nvs_get_u8(nvs_handle_1,"number5",addr_5);
     nvs_commit(nvs_handle_1);
     nvs_close(nvs_handle_1);
 
@@ -162,7 +162,7 @@ void save_to_flash_uint8(uint8_t number_1,uint8_t number_2,uint8_t number_3,uint
     nvs_set_u8(nvs_handle_1,"number2",number_2);
     nvs_set_u8(nvs_handle_1,"number3",number_3);
     nvs_set_u8(nvs_handle_1,"number4",number_4);
-    nvs_set_u8(nvs_handle_1,"number4",number_5);
+    nvs_set_u8(nvs_handle_1,"number5",number_5);
     nvs_commit(nvs_handle_1);
     nvs_close(nvs_handle_1);
 }
@@ -770,9 +770,10 @@ static void recv_from_android(const int sock)
                 if (rx_buffer[i]=='L')
                 {
                     light_coefficient = (uint8_t) rx_buffer[i+1]-90;
+                    //printf("%d*********************\n",light_coefficient);
                 }
                 
-
+                
                 
                 switch (mode_number)
                 {
@@ -783,7 +784,7 @@ static void recv_from_android(const int sock)
                        sleep_coefficient = rx_buffer[i+3]-90;
                        gravity_coefficient = rx_buffer[i+4]-90;
                        save_to_flash_uint8(mic_sensitive,sleep_time,sleep_coefficient,gravity_coefficient,light_coefficient);
-                       printf("%d\n",gravity_coefficient);
+                       printf("%d\n",light_coefficient);
                         }
                     if(rx_buffer[i]=='B'){
                        mic_sensitive = rx_buffer[i+1]-90;
@@ -821,34 +822,36 @@ static void recv_from_android(const int sock)
                 {
                     coordinate_count = 0;
                 }
-                // case 4:
-                // switch (rx_buffer[i])
-                // {
-                // case 'G':
-                // if (coordinate_count>0)
-                // {
-                //     rgb_store[coordinate_count-1].red = rx_buffer[i+1]-90;
-                //     rgb_store[coordinate_count-1].green = rx_buffer[i+2]-90;
-                //     rgb_store[coordinate_count-1].blue = rx_buffer[i+3]-90;
-                //     task_4(x_array,y_array,coordinate_count-1,rgb_store);
-                // }
+                break;
+                case 4:
+                switch (rx_buffer[i])
+                {
+                case 'G':
+                if (coordinate_count>0)
+                {
+                    rgb_store[coordinate_count-1].red = rx_buffer[i+1]-90;
+                    rgb_store[coordinate_count-1].green = rx_buffer[i+2]-90;
+                    rgb_store[coordinate_count-1].blue = rx_buffer[i+3]-90;
+                    task_4(x_array,y_array,coordinate_count-1,rgb_store);
+                }
                 
 
-                //     break;
-                // case 'F':
-                //     x_array[coordinate_count] = rx_buffer[i+1]-90;
-                //     y_array[coordinate_count] = rx_buffer[i+2]-90;
-                //     task_4(x_array,y_array,coordinate_count,rgb_store);
-                // break;
+                    break;
+                case 'F':
+                    x_array[coordinate_count] = rx_buffer[i+1]-90;
+                    y_array[coordinate_count] = rx_buffer[i+2]-90;
+                    task_4(x_array,y_array,coordinate_count,rgb_store);
+                break;
                 
-                // case 'I':
-                //     coordinate_count++;
-                // break;
+                case 'I':
+                    coordinate_count++;
+                break;
 
-                // default:
-                //     break;
-                // }
-                    // break;  
+                default:
+                    break;
+                }
+
+                    break;  
                 
 
 
