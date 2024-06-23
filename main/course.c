@@ -539,7 +539,7 @@ void lighter_2(RGB_struct *input_date)//轮询传输
 void task_3(void)
 { /*熄灯*/
     RGB_struct all_light[LIGHT_NUMBER] = {0};
-    lighter(all_light);
+    lighter_2(all_light);
 }
 
 
@@ -671,7 +671,7 @@ void task_4(int*x,int*y,int length_of_x,RGB_struct*rgb_input)
     }
     
 
-    lighter(input_data_all);
+    lighter_2(input_data_all);
 
 }
 
@@ -783,6 +783,7 @@ static void recv_from_android(const int sock)
                        sleep_coefficient = rx_buffer[i+3]-90;
                        gravity_coefficient = rx_buffer[i+4]-90;
                        save_to_flash_uint8(mic_sensitive,sleep_time,sleep_coefficient,gravity_coefficient,light_coefficient);
+                       printf("%d\n",gravity_coefficient);
                         }
                     if(rx_buffer[i]=='B'){
                        mic_sensitive = rx_buffer[i+1]-90;
@@ -814,43 +815,40 @@ static void recv_from_android(const int sock)
                     x_array[coordinate_count] = rx_buffer[i+1]-90;
                     y_array[coordinate_count] = rx_buffer[i+2]-90;
                     coordinate_count++;
-                   //找到bug所在了,由于上次spi还没有传送完我就再次调用了,所以出问题了,这是个大问题,得先解决
                     task_2(x_array,y_array,length_of_tail);
-                    
                 }
                 if (coordinate_count>=length_of_tail)
                 {
                     coordinate_count = 0;
                 }
-                
-                case 4:
-                switch (rx_buffer[i])
-                {
-                case 'G':
-                if (coordinate_count>0)
-                {
-                    rgb_store[coordinate_count-1].red = rx_buffer[i+1]-90;
-                    rgb_store[coordinate_count-1].green = rx_buffer[i+2]-90;
-                    rgb_store[coordinate_count-1].blue = rx_buffer[i+3]-90;
-                    task_4(x_array,y_array,coordinate_count-1,rgb_store);
-                }
+                // case 4:
+                // switch (rx_buffer[i])
+                // {
+                // case 'G':
+                // if (coordinate_count>0)
+                // {
+                //     rgb_store[coordinate_count-1].red = rx_buffer[i+1]-90;
+                //     rgb_store[coordinate_count-1].green = rx_buffer[i+2]-90;
+                //     rgb_store[coordinate_count-1].blue = rx_buffer[i+3]-90;
+                //     task_4(x_array,y_array,coordinate_count-1,rgb_store);
+                // }
                 
 
-                    break;
-                case 'F':
-                    x_array[coordinate_count] = rx_buffer[i+1]-90;
-                    y_array[coordinate_count] = rx_buffer[i+2]-90;
-                    task_4(x_array,y_array,coordinate_count,rgb_store);
-                break;
+                //     break;
+                // case 'F':
+                //     x_array[coordinate_count] = rx_buffer[i+1]-90;
+                //     y_array[coordinate_count] = rx_buffer[i+2]-90;
+                //     task_4(x_array,y_array,coordinate_count,rgb_store);
+                // break;
                 
-                case 'I':
-                    coordinate_count++;
-                break;
+                // case 'I':
+                //     coordinate_count++;
+                // break;
 
-                default:
-                    break;
-                }
-                    break;  
+                // default:
+                //     break;
+                // }
+                    // break;  
                 
 
 
