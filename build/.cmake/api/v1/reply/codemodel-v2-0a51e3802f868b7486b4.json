@@ -1749,7 +1749,7 @@
 				{
 					"directoryIndex" : 14,
 					"id" : "__idf_esp_app_format::@08c2bdce7fd85cdbea06",
-					"jsonFile" : "target-__idf_esp_app_format-16fb76a0b47a2b16e6ec.json",
+					"jsonFile" : "target-__idf_esp_app_format-af8bf1c5f928c4b41199.json",
 					"name" : "__idf_esp_app_format",
 					"projectIndex" : 1
 				},
@@ -1973,7 +1973,7 @@
 				{
 					"directoryIndex" : 86,
 					"id" : "__idf_main::@7368607ed66887415643",
-					"jsonFile" : "target-__idf_main-e1cfebbd819acbbe0050.json",
+					"jsonFile" : "target-__idf_main-f5f13183434ef36b3f28.json",
 					"name" : "__idf_main",
 					"projectIndex" : 1
 				},
@@ -2141,7 +2141,7 @@
 				{
 					"directoryIndex" : 24,
 					"id" : "__ldgen_output_sections.ld::@874df54e61e20112dfd4",
-					"jsonFile" : "target-__ldgen_output_sections.ld-eabb4ef9f563ef476584.json",
+					"jsonFile" : "target-__ldgen_output_sections.ld-a846cf840054c52fbe2f.json",
 					"name" : "__ldgen_output_sections.ld",
 					"projectIndex" : 1
 				},
@@ -2204,7 +2204,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "course-project.elf::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-course-project.elf-ae228bd0eadba40eed13.json",
+					"jsonFile" : "target-course-project.elf-c1197705743dcf42c44a.json",
 					"name" : "course-project.elf",
 					"projectIndex" : 0
 				},
@@ -2218,7 +2218,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "dfu::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-dfu-5dfc13ea3dda2e9e1f00.json",
+					"jsonFile" : "target-dfu-dee8dcb5c4f5bebcb988.json",
 					"name" : "dfu",
 					"projectIndex" : 0
 				},
@@ -2463,7 +2463,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "uf2::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-uf2-0ddadcf354599baf8fe0.json",
+					"jsonFile" : "target-uf2-e8f71f31071512a5698a.json",
 					"name" : "uf2",
 					"projectIndex" : 0
 				},

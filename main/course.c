@@ -524,6 +524,17 @@ void lighter(RGB_struct *input_date)
     translate(input_date, send_buffer);
     ESP_ERROR_CHECK(spi_device_transmit(spi, &t_1));
 }
+void lighter_2(RGB_struct *input_date)//轮询传输
+{
+
+    spi_transaction_t t_1 = {
+        .length = 8 * 12 * LIGHT_NUMBER + 16,
+        .tx_buffer = send_buffer,
+    };
+
+    translate(input_date, send_buffer);
+    ESP_ERROR_CHECK(spi_device_polling_transmit(spi, &t_1));
+}
 
 void task_3(void)
 { /*熄灯*/
@@ -642,7 +653,7 @@ void task_2(int*x,int*y,int length_of_x)
     }
     
 
-    lighter(input_data_all);
+    lighter_2(input_data_all);
     //printf("\n");
 }
 
@@ -803,8 +814,9 @@ static void recv_from_android(const int sock)
                     x_array[coordinate_count] = rx_buffer[i+1]-90;
                     y_array[coordinate_count] = rx_buffer[i+2]-90;
                     coordinate_count++;
+                   //找到bug所在了,由于上次spi还没有传送完我就再次调用了,所以出问题了,这是个大问题,得先解决
                     task_2(x_array,y_array,length_of_tail);
-                    printf("test********************\n");
+                    
                 }
                 if (coordinate_count>=length_of_tail)
                 {

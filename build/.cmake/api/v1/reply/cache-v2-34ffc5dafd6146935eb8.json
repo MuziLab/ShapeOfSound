@@ -34,22 +34,6 @@
 			"value" : "D:/ESP2/Espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/bin/xtensa-esp32s3-elf-ar.exe"
 		},
 		{
-			"name" : "CMAKE_ASM_COMPILER",
-			"properties" : 
-			[
-				{
-					"name" : "ADVANCED",
-					"value" : "1"
-				},
-				{
-					"name" : "HELPSTRING",
-					"value" : "(This variable does not exist and should not be used)"
-				}
-			],
-			"type" : "UNINITIALIZED",
-			"value" : ""
-		},
-		{
 			"name" : "CMAKE_ASM_COMPILER_AR",
 			"properties" : 
 			[
@@ -1583,7 +1567,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "[D:/python/python.exe][cfound components: Interpreter ][v3.12.1()]"
+			"value" : "[D:/ESP2/Espressif/python_env/idf5.1_py3.11_env/Scripts/python.exe][cfound components: Interpreter ][v3.11.2()]"
 		},
 		{
 			"name" : "GEN_FILES",
@@ -1859,11 +1843,11 @@
 			[
 				{
 					"name" : "HELPSTRING",
-					"value" : "Path to a program."
+					"value" : ""
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "D:/python/python.exe"
+			"value" : "D:/ESP2/Espressif/python_env/idf5.1_py3.11_env/Scripts/python.exe"
 		},
 		{
 			"name" : "_Python3_INTERPRETER_PROPERTIES",
@@ -1875,7 +1859,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "Python;3;12;1;32;;;D:\\python\\Lib;D:\\python\\Lib;D:\\python\\Lib\\site-packages;D:\\python\\Lib\\site-packages"
+			"value" : "Python;3;11;2;32;;;D:\\ESP2\\Espressif\\tools\\idf-python\\3.11.2\\Lib;D:\\ESP2\\Espressif\\tools\\idf-python\\3.11.2\\Lib;D:\\ESP2\\Espressif\\python_env\\idf5.1_py3.11_env\\Lib\\site-packages;D:\\ESP2\\Espressif\\python_env\\idf5.1_py3.11_env\\Lib\\site-packages"
 		},
 		{
 			"name" : "_Python3_INTERPRETER_SIGNATURE",
@@ -1887,7 +1871,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "65d845b4174f4e51f11f700963e29587"
+			"value" : "443ad27b6835f6a1b77ab330486380e3"
 		},
 		{
 			"name" : "course-project_BINARY_DIR",
