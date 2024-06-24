@@ -817,19 +817,11 @@
 		},
 		{
 			"backtrace" : 0,
-			"id" : "__idf_esp_lcd::@d5a84597e1633c9ab0d3"
-		},
-		{
-			"backtrace" : 0,
 			"id" : "__idf_protobuf-c::@b14513c4bd859268ec22"
 		},
 		{
 			"backtrace" : 0,
-			"id" : "__idf_wear_levelling::@cb21b0d7c0815cff11c6"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_protocomm::@d76d01c8dec06205e1fc"
+			"id" : "__idf_esp_lcd::@d5a84597e1633c9ab0d3"
 		},
 		{
 			"backtrace" : 0,
@@ -837,7 +829,15 @@
 		},
 		{
 			"backtrace" : 0,
+			"id" : "__idf_protocomm::@d76d01c8dec06205e1fc"
+		},
+		{
+			"backtrace" : 0,
 			"id" : "__idf_esp_local_ctrl::@d6aad58d2946e56208ef"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_wear_levelling::@cb21b0d7c0815cff11c6"
 		},
 		{
 			"backtrace" : 0,

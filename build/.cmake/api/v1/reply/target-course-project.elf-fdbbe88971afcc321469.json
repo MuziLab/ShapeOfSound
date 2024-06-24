@@ -1591,28 +1591,28 @@
 			"id" : "__idf_esp_hid::@15df40e16a5d8775dd9b"
 		},
 		{
-			"backtrace" : 57,
-			"id" : "__idf_esp_lcd::@d5a84597e1633c9ab0d3"
-		},
-		{
 			"backtrace" : 58,
 			"id" : "__idf_protobuf-c::@b14513c4bd859268ec22"
 		},
 		{
-			"backtrace" : 62,
-			"id" : "__idf_wear_levelling::@cb21b0d7c0815cff11c6"
-		},
-		{
-			"backtrace" : 59,
-			"id" : "__idf_protocomm::@d76d01c8dec06205e1fc"
+			"backtrace" : 57,
+			"id" : "__idf_esp_lcd::@d5a84597e1633c9ab0d3"
 		},
 		{
 			"backtrace" : 61,
 			"id" : "__idf_espcoredump::@718b9a7d55ab42cfc0a3"
 		},
 		{
+			"backtrace" : 59,
+			"id" : "__idf_protocomm::@d76d01c8dec06205e1fc"
+		},
+		{
 			"backtrace" : 60,
 			"id" : "__idf_esp_local_ctrl::@d6aad58d2946e56208ef"
+		},
+		{
+			"backtrace" : 62,
+			"id" : "__idf_wear_levelling::@cb21b0d7c0815cff11c6"
 		},
 		{
 			"backtrace" : 63,
@@ -1643,16 +1643,16 @@
 			"id" : "__idf_spiffs::@df881b71474064c86689"
 		},
 		{
+			"backtrace" : 73,
+			"id" : "__idf_main::@7368607ed66887415643"
+		},
+		{
 			"backtrace" : 72,
 			"id" : "__idf_wifi_provisioning::@9d7e7ffe1b15746c1098"
 		},
 		{
 			"backtrace" : 71,
 			"id" : "__idf_usb::@4a2418067d0bb57af462"
-		},
-		{
-			"backtrace" : 73,
-			"id" : "__idf_main::@7368607ed66887415643"
 		},
 		{
 			"backtrace" : 73,

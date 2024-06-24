@@ -55,6 +55,7 @@ TaskHandle_t task_1_1_music_get_number = NULL;//任务句柄
 int try_time = 0;
 #define TRY_TIMES 4
 
+bool wifi_state =false;
 
 #define EXAMPLE_STD_BCLK_IO1 GPIO_NUM_4 // i2s
 #define EXAMPLE_STD_WS_IO1 GPIO_NUM_5   
@@ -697,22 +698,68 @@ void test_ma(void)
 
 
     //printf("%d %d %d %d\n", rgb_test[0].blue, rgb_test[0].green, rgb_test[1].blue, rgb_test[1].red);
-    //改,这样,先红色0,然后蓝色变强,然后绿色变强同时蓝色变弱,让后红色+2,重复即可
-    for (size_t r_i = 0; r_i < 15; r_i=r_i+2)
-{
-    for (size_t i_count = 0; i_count < 32; i_count++)
+    //改,这样,先红色0,然后蓝色变强,然后绿色变强同时蓝色变弱,然后红色+2,重复即可
+//     for (size_t r_i = 0; r_i < 15; r_i=r_i+2)
+// {
+//     for (size_t i_count = 0; i_count < 32; i_count++)
+//     {
+//         if (i_count<16)
+//         {
+//             rgb_store[i_count*(r_i+1)].blue = i_count;
+//             rgb_store[i_count*(r_i+1)].red = r_i;
+//             rgb_store[i_count*(r_i+1)].green = 0;
+//         }else{
+//             rgb_store[i_count*(r_i+1)].blue = 15-(i_count-16);
+//             rgb_store[i_count*(r_i+1)].red = r_i;
+//             rgb_store[i_count*(r_i+1)].green = i_count-16;
+//         }
+        
+//     }
+    
+// }
+int count_1 = 0;
+while (1)
+{   
+    if (count_1%2)
     {
         
-    }
-    
+        for (size_t i = 0; i < 256; i++)
+{   rgb_store[i].blue = 0;
+    rgb_store[i].red = 15*light_coefficient;
+    task_4(x_test,y_test,i+1,rgb_store);
+    vTaskDelay(2);
+}
+    }else{
+    for (size_t i = 0; i < 256; i++)
+{   
+    rgb_store[i].red = 0;
+    rgb_store[i].blue = 15*light_coefficient;
 }
 
 for (size_t i = 0; i < 256; i++)
 {
-
     task_4(x_test,y_test,i+1,rgb_store);
-    vTaskDelay(1);
+    vTaskDelay(2);
 }
+    }
+    count_1++;
+    if (try_time==0)
+    {
+        break;
+    }
+    if (try_time==TRY_TIMES)
+    {
+
+        break;
+    }
+    
+    
+
+}
+    vTaskResume(task_1_music_show);
+    vTaskResume(task_1_1_music_get_number);
+
+
 }
 
 
@@ -743,6 +790,7 @@ void mode_function(int mode_number)
         
         vTaskSuspend(task_1_music_show);
         vTaskSuspend(task_1_1_music_get_number);
+        memset(rgb_store,0,sizeof(rgb_store));
         task_3();
         if (xQueueReset(xQueue) != pdPASS) 
         {
@@ -1072,11 +1120,16 @@ void call_back(void* event_handler_arg,esp_event_base_t event_base,int32_t event
     if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED)
     {   
         if (try_time<TRY_TIMES)
-        {   
+        { 
+            if(wifi_state != true &&try_time==TRY_TIMES)
+                {
+                    try_time = 0;
+                } else{
             try_time++;
             esp_wifi_connect();
             
             printf("尝试次数:%d\n",try_time);
+                }
         }
         else
         {
@@ -1088,7 +1141,8 @@ void call_back(void* event_handler_arg,esp_event_base_t event_base,int32_t event
     if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP)
     {
         printf("连接成功\n");
-        xTaskCreate(tcp_server_task, "tcp_task", 8192, NULL, 5, &task_1_music_show);
+        wifi_state = true;
+        xTaskCreate(tcp_server_task, "tcp_server", 4096, (void*)AF_INET, 5, NULL);
         try_time = 0;
     }
 }
@@ -1199,11 +1253,12 @@ static void tp_example_read_task(void *pvParameter)
         {
             if (evt.pad_num == MODE_LINE)//判断触发的是哪个按钮
             {   
-                if (try_time!=TRY_TIMES)
+                if (wifi_state!=true&&try_time!=TRY_TIMES)
                 {
                     wifi_connecter();
                     mode_function(3);
                 }
+
                 
                 
             }
