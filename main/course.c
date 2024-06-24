@@ -52,6 +52,9 @@
 TaskHandle_t task_1_music_show = NULL;
 TaskHandle_t task_1_1_music_get_number = NULL;//任务句柄
 
+int try_time = 0;
+#define TRY_TIMES 4
+
 
 #define EXAMPLE_STD_BCLK_IO1 GPIO_NUM_4 // i2s
 #define EXAMPLE_STD_WS_IO1 GPIO_NUM_5   
@@ -694,22 +697,21 @@ void test_ma(void)
 
 
     //printf("%d %d %d %d\n", rgb_test[0].blue, rgb_test[0].green, rgb_test[1].blue, rgb_test[1].red);
-    //改,这样,先红色0,让后蓝色变强,让后绿色变强,然后蓝色变弱,让后红色+1,重复即可
-
-for (size_t i = 0; i < 256; i++)
+    //改,这样,先红色0,然后蓝色变强,然后绿色变强同时蓝色变弱,让后红色+2,重复即可
+    for (size_t r_i = 0; r_i < 15; r_i=r_i+2)
 {
-    rgb_store[i].red = rgb[i]*light_coefficient;
-    for (size_t i = 0; i < 15; i++)
+    for (size_t i_count = 0; i_count < 32; i_count++)
     {
-        for (size_t i_count = 0; i_count < 15; i_count++)
-        {
-            /* code */
-        }
         
     }
     
+}
+
+for (size_t i = 0; i < 256; i++)
+{
+
     task_4(x_test,y_test,i+1,rgb_store);
-    vTaskDelay(10);
+    vTaskDelay(1);
 }
 }
 
@@ -1042,12 +1044,6 @@ static esp_err_t example_set_dns_server(esp_netif_t *netif, uint32_t addr, esp_n
 
 
 
-
-
-
-
-
-
 static void example_set_static_ip(esp_netif_t *netif)
 {
     if (esp_netif_dhcpc_stop(netif) != ESP_OK) {
@@ -1069,9 +1065,8 @@ static void example_set_static_ip(esp_netif_t *netif)
 }
 
 
-int try_time = 0;
-#define TRY_TIMES 4
 
+//连接时设置一个动画,就是马天洋的动画,在按下按钮的同时,进行wifi连接和动画播放,每次放完一次动画查一下连接次数,如果是0就不放动画了,否则就放
 void call_back(void* event_handler_arg,esp_event_base_t event_base,int32_t event_id,void* event_data)
 {
     if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED)
@@ -1093,6 +1088,7 @@ void call_back(void* event_handler_arg,esp_event_base_t event_base,int32_t event
     if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP)
     {
         printf("连接成功\n");
+        xTaskCreate(tcp_server_task, "tcp_task", 8192, NULL, 5, &task_1_music_show);
         try_time = 0;
     }
 }
@@ -1206,6 +1202,7 @@ static void tp_example_read_task(void *pvParameter)
                 if (try_time!=TRY_TIMES)
                 {
                     wifi_connecter();
+                    mode_function(3);
                 }
                 
                 

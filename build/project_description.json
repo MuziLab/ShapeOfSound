@@ -1,7 +1,7 @@
 {
     "version":            "1",
     "project_name":       "course-project",
-    "project_version":    "4c684b6-dirty",
+    "project_version":    "65eb020-dirty",
     "project_path":       "D:/vs_code/esp_and_espidf/course-project",
     "idf_path":           "D:/ESP",
     "build_dir":          "D:/vs_code/esp_and_espidf/course-project/build",
