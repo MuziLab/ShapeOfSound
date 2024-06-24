@@ -1749,7 +1749,7 @@
 				{
 					"directoryIndex" : 14,
 					"id" : "__idf_esp_app_format::@08c2bdce7fd85cdbea06",
-					"jsonFile" : "target-__idf_esp_app_format-8363c96d7b4d8948c9c2.json",
+					"jsonFile" : "target-__idf_esp_app_format-0dbbb12023a2705ac125.json",
 					"name" : "__idf_esp_app_format",
 					"projectIndex" : 1
 				},
@@ -1833,7 +1833,7 @@
 				{
 					"directoryIndex" : 70,
 					"id" : "__idf_esp_local_ctrl::@d6aad58d2946e56208ef",
-					"jsonFile" : "target-__idf_esp_local_ctrl-80aff09efa5f2453da82.json",
+					"jsonFile" : "target-__idf_esp_local_ctrl-79d4f81189cff7baa2f0.json",
 					"name" : "__idf_esp_local_ctrl",
 					"projectIndex" : 1
 				},
@@ -1917,7 +1917,7 @@
 				{
 					"directoryIndex" : 74,
 					"id" : "__idf_fatfs::@75ac1d9b25dacc8cc9e7",
-					"jsonFile" : "target-__idf_fatfs-f233fa5bdb12510dca9d.json",
+					"jsonFile" : "target-__idf_fatfs-bc6165dfbdf5ceb532f2.json",
 					"name" : "__idf_fatfs",
 					"projectIndex" : 1
 				},
@@ -1973,7 +1973,7 @@
 				{
 					"directoryIndex" : 86,
 					"id" : "__idf_main::@7368607ed66887415643",
-					"jsonFile" : "target-__idf_main-9df9b4484fb14f9056a0.json",
+					"jsonFile" : "target-__idf_main-ff27f87d22e48f0f6f38.json",
 					"name" : "__idf_main",
 					"projectIndex" : 1
 				},
@@ -2120,7 +2120,7 @@
 				{
 					"directoryIndex" : 85,
 					"id" : "__idf_wifi_provisioning::@9d7e7ffe1b15746c1098",
-					"jsonFile" : "target-__idf_wifi_provisioning-47f0232324dbc6cd1c82.json",
+					"jsonFile" : "target-__idf_wifi_provisioning-88bb617940224a2df74f.json",
 					"name" : "__idf_wifi_provisioning",
 					"projectIndex" : 1
 				},
@@ -2141,7 +2141,7 @@
 				{
 					"directoryIndex" : 24,
 					"id" : "__ldgen_output_sections.ld::@874df54e61e20112dfd4",
-					"jsonFile" : "target-__ldgen_output_sections.ld-5354b0a1760fe6b8e21b.json",
+					"jsonFile" : "target-__ldgen_output_sections.ld-a23728fa6ecc8581e3fe.json",
 					"name" : "__ldgen_output_sections.ld",
 					"projectIndex" : 1
 				},
@@ -2204,7 +2204,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "course-project.elf::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-course-project.elf-325c50a42005fe95b3de.json",
+					"jsonFile" : "target-course-project.elf-3e9970fd29c5d469d83c.json",
 					"name" : "course-project.elf",
 					"projectIndex" : 0
 				},
@@ -2218,7 +2218,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "dfu::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-dfu-dee8dcb5c4f5bebcb988.json",
+					"jsonFile" : "target-dfu-5dfc13ea3dda2e9e1f00.json",
 					"name" : "dfu",
 					"projectIndex" : 0
 				},
@@ -2463,7 +2463,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "uf2::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-uf2-e8f71f31071512a5698a.json",
+					"jsonFile" : "target-uf2-0ddadcf354599baf8fe0.json",
 					"name" : "uf2",
 					"projectIndex" : 0
 				},

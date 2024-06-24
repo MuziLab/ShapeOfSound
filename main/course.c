@@ -724,6 +724,9 @@ void mode_function(int mode_number)
         memset(y_array,0,sizeof(y_array));
         memset(rgb_store,0,sizeof(rgb_store));
         coordinate_count = 0;
+        get_rgb.blue = 15;
+        get_rgb.red = 0;
+        get_rgb.green = 0;
         if (xQueueReset(xQueue) != pdPASS) 
         {
         }
@@ -814,8 +817,8 @@ static void recv_from_android(const int sock)
                 if (rx_buffer[i]=='F')
                 {
                     
-                    x_array[coordinate_count] = rx_buffer[i+1]-91;
-                    y_array[coordinate_count] = rx_buffer[i+2]-91;
+                    x_array[coordinate_count] = 15-(rx_buffer[i+1]-91);
+                    y_array[coordinate_count] = 15-(rx_buffer[i+2]-91);
                     coordinate_count++;
                     task_2(x_array,y_array,length_of_tail);
                 }
@@ -842,14 +845,11 @@ static void recv_from_android(const int sock)
 
                     break;
                 case 'F':
-                    x_array[coordinate_count] = rx_buffer[i+1]-91;
-                    y_array[coordinate_count] = rx_buffer[i+2]-91;
-                    if (coordinate_count == 0)
-                    {
-                        get_rgb.blue = 15*light_coefficient;
-                    }
-                    
-                    rgb_store[coordinate_count] = get_rgb;
+                    x_array[coordinate_count] = 15-(rx_buffer[i+1]-91);
+                    y_array[coordinate_count] = 15-(rx_buffer[i+2]-91);
+                    rgb_store[coordinate_count].red= get_rgb.red*light_coefficient;
+                    rgb_store[coordinate_count].blue= get_rgb.blue*light_coefficient;
+                    rgb_store[coordinate_count].green= get_rgb.green*light_coefficient;
                     task_4(x_array,y_array,coordinate_count+1,rgb_store);
                 break;
                 
@@ -863,6 +863,19 @@ static void recv_from_android(const int sock)
                     rgb_store[coordinate_count-1].blue = get_rgb.blue*light_coefficient;
                     task_4(x_array,y_array,coordinate_count,rgb_store);
                 break;
+
+                case 'C':
+                mode_function(mode_number);//重启模式
+                break;
+                case 'H':
+                coordinate_count--;
+                rgb_store[coordinate_count].red = 0;
+                rgb_store[coordinate_count].blue = 0;
+                rgb_store[coordinate_count].green = 0;
+                x_array[coordinate_count] = 0;
+                y_array[coordinate_count] = 0;
+                task_4(x_array,y_array,coordinate_count,rgb_store);
+                    break;
                 
                 //还有撤回按键要弄,看样子明天还得干.
 
