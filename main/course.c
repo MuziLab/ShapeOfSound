@@ -682,8 +682,36 @@ int y_array[512] = {0};
 int coordinate_count = 0;
 RGB_struct get_rgb ={0};
 RGB_struct rgb_store[512] = {0};
+    int x_test[256] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,14,14,14,14,14,14,14,14,14,14,14,14,14,13,12,11,10,9,8,7,6,5,4,3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,2,3,4,5,6,7,8,9,10,11,12,13,13,13,13,13,13,13,13,13,13,13,13,12,11,10,9,8,7,6,5,4,3,2,2,2,2,2,2,2,2,2,2,2,3,4,5,6,7,8,9,10,11,12,12,12,12,12,12,12,12,12,12,11,10,9,8,7,6,5,4,3,3,3,3,3,3,3,3,3,4,5,6,7,8,9,10,11,11,11,11,11,11,11,11,10,9,8,7,6,5,4,4,4,4,4,4,4,5,6,7,8,9,10,10,10,10,10,10,9,8,7,6,5,5,5,5,5,6,7,8,9,9,9,9,8,7,6,6,6,7,8,8,9
+};
+    int y_test[256] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,3,4,5,6,7,8,9,10,11,12,13,14,14,14,14,14,14,14,14,14,14,14,14,14,14,13,12,11,10,9,8,7,6,5,4,3,2,2,2,2,2,2,2,2,2,2,2,2,2,3,4,5,6,7,8,9,10,11,12,13,13,13,13,13,13,13,13,13,13,13,13,12,11,10,9,8,7,6,5,4,3,3,3,3,3,3,3,3,3,3,3,4,5,6,7,8,9,10,11,12,12,12,12,12,12,12,12,12,12,11,10,9,8,7,6,5,4,4,4,4,4,4,4,4,4,5,6,7,8,9,10,11,11,11,11,11,11,11,11,10,9,8,7,6,5,5,5,5,5,5,5,6,7,8,9,10,10,10,10,10,10,9,8,7,6,6,6,6,6,7,8,9,9,9,9,8,7,7,7,8,8
+};
+int rgb [256] = {0,1,1,2,2,2,3,3,3,3,4,4,4,4,4,5,5,5,5,5,5,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,13,13,13,13,13,13,13,13,13,13,13,13,13,13,12,12,12,12,12,12,12,12,12,12,12,12,12,11,11,11,11,11,11,11,11,11,11,11,11,10,10,10,10,10,10,10,10,10,10,10,9,9,9,9,9,9,9,9,9,9,8,8,8,8,8,8,8,8,8,7,7,7,7,7,7,7,7,6,6,6,6,6,6,6,5,5,5,5,5,5,4,4,4,4,4,3,3,3,3,2,2,2,1,1,0
+};
+
+void test_ma(void)
+{   
 
 
+    //printf("%d %d %d %d\n", rgb_test[0].blue, rgb_test[0].green, rgb_test[1].blue, rgb_test[1].red);
+    //改,这样,先红色0,让后蓝色变强,让后绿色变强,然后蓝色变弱,让后红色+1,重复即可
+
+for (size_t i = 0; i < 256; i++)
+{
+    rgb_store[i].red = rgb[i]*light_coefficient;
+    for (size_t i = 0; i < 15; i++)
+    {
+        for (size_t i_count = 0; i_count < 15; i_count++)
+        {
+            /* code */
+        }
+        
+    }
+    
+    task_4(x_test,y_test,i+1,rgb_store);
+    vTaskDelay(10);
+}
+}
 
 
 
@@ -697,9 +725,10 @@ void mode_function(int mode_number)
 
         break;
     case 2:
-        task_3();
+        
         vTaskSuspend(task_1_music_show);
         vTaskSuspend(task_1_1_music_get_number);
+        task_3();
         memset(x_array,0,sizeof(x_array));
         memset(y_array,0,sizeof(y_array));
         coordinate_count = 0;
@@ -709,17 +738,20 @@ void mode_function(int mode_number)
         
         break;
     case 3:
-        task_3();
+        
         vTaskSuspend(task_1_music_show);
         vTaskSuspend(task_1_1_music_get_number);
+        task_3();
         if (xQueueReset(xQueue) != pdPASS) 
         {
         }
+        test_ma();
         break;
     case 4:
-        task_3();
+        
         vTaskSuspend(task_1_music_show);
         vTaskSuspend(task_1_1_music_get_number);
+        task_3();
         memset(x_array,0,sizeof(x_array));
         memset(y_array,0,sizeof(y_array));
         memset(rgb_store,0,sizeof(rgb_store));
@@ -735,6 +767,7 @@ void mode_function(int mode_number)
         break;
     }
 }
+
 
 
 
@@ -781,6 +814,10 @@ static void recv_from_android(const int sock)
                 
                 switch (mode_number)
                 {
+                case 3:
+                
+                break;
+
                 case 1:
                     if(rx_buffer[i]=='A'){
                        mic_sensitive = rx_buffer[i+1]-90;
@@ -1005,6 +1042,12 @@ static esp_err_t example_set_dns_server(esp_netif_t *netif, uint32_t addr, esp_n
 
 
 
+
+
+
+
+
+
 static void example_set_static_ip(esp_netif_t *netif)
 {
     if (esp_netif_dhcpc_stop(netif) != ESP_OK) {
@@ -1026,97 +1069,192 @@ static void example_set_static_ip(esp_netif_t *netif)
 }
 
 
-void wifi_call_back(void* event_handler_arg,esp_event_base_t event_base,int32_t event_id,void* event_data)
-{   
-    if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_START) {
-        esp_wifi_connect();
-    } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_CONNECTED) {
-        //example_set_static_ip(event_handler_arg);
-        printf("***************************************\n");
-    } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
-        if (s_retry_num < 3) {
-            esp_wifi_connect();
-            s_retry_num++;
-            ESP_LOGI(TAG, "retry to connect to the AP");
-        } else {
-            xEventGroupSetBits(s_wifi_event_group, WIFI_FAIL_BIT);
-        }
-        ESP_LOGI(TAG,"connect to the AP fail");
-    } else if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
-        ip_event_got_ip_t* event = (ip_event_got_ip_t*) event_data;
-        ESP_LOGI(TAG, "static ip:" IPSTR, IP2STR(&event->ip_info.ip));
-        s_retry_num = 0;
-        xEventGroupSetBits(s_wifi_event_group, WIFI_CONNECTED_BIT);
-        xTaskCreate(tcp_server_task, "tcp_server", 4096, (void*)AF_INET, 5, NULL);
-    }
+int try_time = 0;
+#define TRY_TIMES 4
 
+void call_back(void* event_handler_arg,esp_event_base_t event_base,int32_t event_id,void* event_data)
+{
+    if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED)
+    {   
+        if (try_time<TRY_TIMES)
+        {   
+            try_time++;
+            esp_wifi_connect();
+            
+            printf("尝试次数:%d\n",try_time);
+        }
+        else
+        {
+            printf("连接失败\n");
+        }
+        
+  
+    }
+    if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP)
+    {
+        printf("连接成功\n");
+        try_time = 0;
+    }
 }
 
 
 void wifi_connecter(void)/////这个函数实现了连接wifi的功能
 {
 
-    s_wifi_event_group = xEventGroupCreate();
-
-    ESP_ERROR_CHECK(esp_netif_init());
-
-    ESP_ERROR_CHECK(esp_event_loop_create_default());
-
-    esp_netif_t *sta_netif = esp_netif_create_default_wifi_sta();
-    assert(sta_netif);
-
-    wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
-    ESP_ERROR_CHECK(esp_wifi_init(&cfg));
-
-    esp_event_handler_instance_t instance_any_id;
-    esp_event_handler_instance_t instance_got_ip;
-    ESP_ERROR_CHECK(esp_event_handler_instance_register(WIFI_EVENT,
-                                                        ESP_EVENT_ANY_ID,
-                                                        &wifi_call_back,
-                                                        sta_netif,
-                                                        &instance_any_id));
-    ESP_ERROR_CHECK(esp_event_handler_instance_register(IP_EVENT,
-                                                        IP_EVENT_STA_GOT_IP,
-                                                        &wifi_call_back,
-                                                        sta_netif,
-                                                        &instance_got_ip));
-
-    wifi_config_t wifi_config = {
-        .sta = {
+    esp_netif_create_default_wifi_sta();
+    //一些初始化的函数，包括事件循环的启用；
+    ///////////////////////////////////
+    /*事件*/
+    esp_event_handler_instance_register(WIFI_EVENT,WIFI_EVENT_STA_DISCONNECTED,call_back,NULL,NULL);//连接失败
+    esp_event_handler_instance_register(IP_EVENT,IP_EVENT_STA_GOT_IP,call_back,NULL,NULL);//连接成功
+    /////////////////////////////
+    wifi_init_config_t wifi_cfg = WIFI_INIT_CONFIG_DEFAULT();
+    esp_wifi_init(&wifi_cfg);
+    esp_wifi_set_mode(WIFI_MODE_STA);
+    wifi_config_t sta_cfg = 
+    {
+        .sta=
+        {
             .ssid = ssid_1,
-            .password = password_1,
-	     .threshold.authmode = WIFI_AUTH_WPA2_PSK,//更高级的WPA2,不用懂
-        },
+            .password = password_1
+        }   
     };
-    ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA) );
-    ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config) );
-    ESP_ERROR_CHECK(esp_wifi_start() );
-
-    ESP_LOGI(TAG, "wifi_init_sta finished.");
-
-    EventBits_t bits = xEventGroupWaitBits(s_wifi_event_group,
-            WIFI_CONNECTED_BIT | WIFI_FAIL_BIT,
-            pdFALSE,
-            pdFALSE,
-            portMAX_DELAY);
-
-
-    if (bits & WIFI_CONNECTED_BIT) {
-        ESP_LOGI(TAG, "connected to ap SSID:%s password:%s",
-                 ssid_1, password_1);
-    } else if (bits & WIFI_FAIL_BIT) {
-        ESP_LOGI(TAG, "Failed to connect to SSID:%s, password:%s",
-                 ssid_1, password_1);
-    } else {
-        ESP_LOGE(TAG, "UNEXPECTED EVENT");
-    }
-
-    ESP_ERROR_CHECK(esp_event_handler_instance_unregister(IP_EVENT, IP_EVENT_STA_GOT_IP, instance_got_ip));
-    ESP_ERROR_CHECK(esp_event_handler_instance_unregister(WIFI_EVENT, ESP_EVENT_ANY_ID, instance_any_id));
-    vEventGroupDelete(s_wifi_event_group);
+    esp_wifi_set_config(WIFI_IF_STA,&sta_cfg);
+    esp_wifi_start();
+    esp_wifi_set_ps(WIFI_PS_NONE);
+    esp_wifi_connect();
 }
 
 
+
+static QueueHandle_t que_touch = NULL;
+typedef struct touch_msg
+{
+    touch_pad_intr_mask_t intr_mask;
+    uint32_t pad_num;
+    uint32_t pad_status;
+    uint32_t pad_val;
+} touch_event_t;
+int light = 0;
+int mode_state = -1; // 1代表进入了模式选择,1-10代表不同模式,0代表进入判断是否误触模式,-1代表悬空
+
+#define MODE_LINE 1
+#define TOUCH_BUTTON_NUM 2
+#define SENSITIVITY 1000
+static const touch_pad_t button[TOUCH_BUTTON_NUM] = {
+    TOUCH_PAD_NUM1, // 'SELECT' button.
+    TOUCH_PAD_NUM2, // 'MENU' button.
+};
+
+
+static void touchsensor_interrupt_cb(void *arg)
+{
+    int task_awoken = pdFALSE;
+    touch_event_t evt;
+
+    evt.intr_mask = touch_pad_read_intr_status_mask();
+    evt.pad_status = touch_pad_get_status();
+    evt.pad_num = touch_pad_get_current_meas_channel();
+
+    xQueueSendFromISR(que_touch, &evt, &task_awoken);
+    if (task_awoken == pdTRUE)
+    {
+        portYIELD_FROM_ISR();//这个是切换上面的中断任务为其他任务用的
+    };
+}
+
+static void tp_example_set_thresholds(void)
+{
+    for (int i = 0; i < TOUCH_BUTTON_NUM; i++)
+    {
+        touch_pad_set_thresh(button[i], SENSITIVITY);
+    }
+}
+
+static void touchsensor_filter_set(touch_filter_mode_t mode)
+{
+    /* Filter function */
+    touch_filter_config_t filter_info = {
+        .mode = mode,      // Test jitter and filter 1/4.
+        .debounce_cnt = 1, // 1 time count.
+        .noise_thr = 0,    // 50%
+        .jitter_step = 4,  // use for jitter mode.
+        .smh_lvl = TOUCH_PAD_SMOOTH_IIR_2,
+    };
+    touch_pad_filter_set_config(&filter_info);
+    touch_pad_filter_enable();
+}
+
+static void tp_example_read_task(void *pvParameter)
+{
+    touch_event_t evt = {0};
+    /* Wait touch sensor init done */
+    vTaskDelay(50 / portTICK_PERIOD_MS);
+    tp_example_set_thresholds();
+
+    while (1)
+    {
+        int ret = xQueueReceive(que_touch, &evt, (TickType_t)portMAX_DELAY);//从队列中获取信息(这个队列在按钮触发时发送信息)
+        if (ret != pdTRUE)
+        {
+            continue;
+        }
+        if (evt.intr_mask & TOUCH_PAD_INTR_MASK_ACTIVE)//一个按钮被激活
+        {
+            if (evt.pad_num == MODE_LINE)//判断触发的是哪个按钮
+            {   
+                if (try_time!=TRY_TIMES)
+                {
+                    wifi_connecter();
+                }
+                
+                
+            }
+        }
+
+        if (evt.intr_mask & TOUCH_PAD_INTR_MASK_INACTIVE)//一个按钮没被激活??
+        {
+            // printf("TouchSensor [%" PRIu32 "] be inactivated, status mask 0x%" PRIu32"\n", evt.pad_num, evt.pad_status);
+        }
+    };
+}
+
+void touch_function(void)
+{
+    if (que_touch == NULL)
+    {
+        que_touch = xQueueCreate(TOUCH_BUTTON_NUM, sizeof(touch_event_t));
+    }
+    touch_pad_init();
+    for (int i = 0; i < TOUCH_BUTTON_NUM; i++)
+    {
+        touch_pad_config(button[i]);
+    }
+
+    /* Denoise setting at TouchSensor 0. */
+    touch_pad_denoise_t denoise = {
+        /* The bits to be cancelled are determined according to the noise level. */
+        .grade = TOUCH_PAD_DENOISE_BIT4,
+        /* By adjusting the parameters, the reading of T0 should be approximated to the reading of the measured channel. */
+        .cap_level = TOUCH_PAD_DENOISE_CAP_L4,
+    };
+    touch_pad_denoise_set_config(&denoise);
+    touch_pad_denoise_enable();
+    /* Filter setting */
+    touchsensor_filter_set(TOUCH_PAD_FILTER_IIR_16);
+    touch_pad_timeout_set(true, TOUCH_PAD_THRESHOLD_MAX);
+    /* Register touch interrupt ISR, enable intr type. */
+    touch_pad_isr_register(touchsensor_interrupt_cb, NULL, TOUCH_PAD_INTR_MASK_ALL);
+    /* If you have other touch algorithm, you can get the measured value after the `TOUCH_PAD_INTR_MASK_SCAN_DONE` interrupt is generated. */
+    touch_pad_intr_enable(TOUCH_PAD_INTR_MASK_ACTIVE | TOUCH_PAD_INTR_MASK_INACTIVE | TOUCH_PAD_INTR_MASK_TIMEOUT);
+
+    /* Enable touch sensor clock. Work mode is "timer trigger". */
+    touch_pad_set_fsm_mode(TOUCH_FSM_MODE_TIMER);
+    touch_pad_fsm_start();
+
+    // Start a task to show what pads have been touched
+    xTaskCreate(&tp_example_read_task, "touch_pad_read_task", 4096, NULL, 5, NULL);
+}
 
 
 
@@ -1127,7 +1265,8 @@ void app_main(void)
       ESP_ERROR_CHECK(nvs_flash_erase());
       ret = nvs_flash_init();
     }
-
+    ESP_ERROR_CHECK(esp_netif_init());
+    ESP_ERROR_CHECK(esp_event_loop_create_default());
 
     i2s_example_init_std_duplex();
     xQueue = xQueueCreate(10, sizeof(int *));
@@ -1140,6 +1279,7 @@ void app_main(void)
     read_from_flash_uint8(&mic_sensitive,&sleep_time,&sleep_coefficient,&gravity_coefficient,&light_coefficient);
     xTaskCreate(receive_data_2, "receive_data_2", 8192*4, NULL, 5, &task_1_1_music_get_number);
     xTaskCreate(shape_of_music, "task_1_music", 8192, NULL, 5, &task_1_music_show);
-    wifi_connecter();
+    touch_function();
+    
 }
 
