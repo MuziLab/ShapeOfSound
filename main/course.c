@@ -55,7 +55,10 @@ TaskHandle_t task_1_1_music_get_number = NULL;//任务句柄
 int try_time = 0;
 #define TRY_TIMES 4
 
+int tick_1 = 0;
+
 bool wifi_state =false;
+//每次触摸时看是否为true,是就不再连接,否就尝试连接,连接时看try是否超标,超标就不再进行,并且把try归零.加载状态就看wifi_state和trytime.有一个符合就break
 
 #define EXAMPLE_STD_BCLK_IO1 GPIO_NUM_4 // i2s
 #define EXAMPLE_STD_WS_IO1 GPIO_NUM_5   
@@ -693,6 +696,12 @@ RGB_struct rgb_store[512] = {0};
 int rgb [256] = {0,1,1,2,2,2,3,3,3,3,4,4,4,4,4,5,5,5,5,5,5,6,6,6,6,6,6,6,7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,13,13,13,13,13,13,13,13,13,13,13,13,13,13,12,12,12,12,12,12,12,12,12,12,12,12,12,11,11,11,11,11,11,11,11,11,11,11,11,10,10,10,10,10,10,10,10,10,10,10,9,9,9,9,9,9,9,9,9,9,8,8,8,8,8,8,8,8,8,7,7,7,7,7,7,7,7,6,6,6,6,6,6,6,5,5,5,5,5,5,4,4,4,4,4,3,3,3,3,2,2,2,1,1,0
 };
 
+int x_2[32]={2,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,16};
+int y_2[32]={6,7,8,5,9,4,10,3,11,3,12,3,13,4,14,5,15,4,14,3,13,3,12,3,11,4,10,5,9,6,7,8};
+void test_aix(void)
+{
+    task_2(x_2,y_2,32);
+}
 void test_ma(void)
 {   
 
@@ -727,7 +736,7 @@ while (1)
 {   rgb_store[i].blue = 0;
     rgb_store[i].red = 15*light_coefficient;
     task_4(x_test,y_test,i+1,rgb_store);
-    vTaskDelay(2);
+    vTaskDelay(1);
 }
     }else{
     for (size_t i = 0; i < 256; i++)
@@ -739,27 +748,20 @@ while (1)
 for (size_t i = 0; i < 256; i++)
 {
     task_4(x_test,y_test,i+1,rgb_store);
-    vTaskDelay(2);
+    vTaskDelay(1);
 }
     }
     count_1++;
-    if (try_time==0)
-    {
-        break;
-    }
-    if (try_time==TRY_TIMES)
-    {
+if (tick_1 == 1)
+{
+    tick_1 = 0;
+    break;
+}
 
-        break;
-    }
     
-    
-
 }
     vTaskResume(task_1_music_show);
     vTaskResume(task_1_1_music_get_number);
-
-
 }
 
 
@@ -1121,19 +1123,18 @@ void call_back(void* event_handler_arg,esp_event_base_t event_base,int32_t event
     {   
         if (try_time<TRY_TIMES)
         { 
-            if(wifi_state != true &&try_time==TRY_TIMES)
-                {
-                    try_time = 0;
-                } else{
             try_time++;
             esp_wifi_connect();
             
             printf("尝试次数:%d\n",try_time);
-                }
+
         }
         else
         {
             printf("连接失败\n");
+            wifi_state = false;
+            try_time = 0;
+            tick_1 = 1;
         }
         
   
@@ -1142,8 +1143,9 @@ void call_back(void* event_handler_arg,esp_event_base_t event_base,int32_t event
     {
         printf("连接成功\n");
         wifi_state = true;
-        xTaskCreate(tcp_server_task, "tcp_server", 4096, (void*)AF_INET, 5, NULL);
         try_time = 0;
+        tick_1 = 1;
+        xTaskCreate(tcp_server_task, "tcp_server", 4096, (void*)AF_INET, 5, NULL);
     }
 }
 
@@ -1151,8 +1153,8 @@ void call_back(void* event_handler_arg,esp_event_base_t event_base,int32_t event
 void wifi_connecter(void)/////这个函数实现了连接wifi的功能
 {
 
-    esp_netif_create_default_wifi_sta();
-    //一些初始化的函数，包括事件循环的启用；
+    
+    //一些初始化的函数，包括事件循环的启用；但是不负责链接wifi,有官方函数链接
     ///////////////////////////////////
     /*事件*/
     esp_event_handler_instance_register(WIFI_EVENT,WIFI_EVENT_STA_DISCONNECTED,call_back,NULL,NULL);//连接失败
@@ -1172,7 +1174,7 @@ void wifi_connecter(void)/////这个函数实现了连接wifi的功能
     esp_wifi_set_config(WIFI_IF_STA,&sta_cfg);
     esp_wifi_start();
     esp_wifi_set_ps(WIFI_PS_NONE);
-    esp_wifi_connect();
+    
 }
 
 
@@ -1253,9 +1255,9 @@ static void tp_example_read_task(void *pvParameter)
         {
             if (evt.pad_num == MODE_LINE)//判断触发的是哪个按钮
             {   
-                if (wifi_state!=true&&try_time!=TRY_TIMES)
+                if (wifi_state!=true)
                 {
-                    wifi_connecter();
+                    esp_wifi_connect();
                     mode_function(3);
                 }
 
@@ -1331,6 +1333,8 @@ void app_main(void)
     read_from_flash_uint8(&mic_sensitive,&sleep_time,&sleep_coefficient,&gravity_coefficient,&light_coefficient);
     xTaskCreate(receive_data_2, "receive_data_2", 8192*4, NULL, 5, &task_1_1_music_get_number);
     xTaskCreate(shape_of_music, "task_1_music", 8192, NULL, 5, &task_1_music_show);
+    esp_netif_create_default_wifi_sta();
+    wifi_connecter();
     touch_function();
     
 }

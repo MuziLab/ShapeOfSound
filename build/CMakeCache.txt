@@ -43,9 +43,8 @@ CMAKE_ASM_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
 //Flags used by the ASM compiler during RELWITHDEBINFO builds.
 CMAKE_ASM_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 
-//Choose the type of build, options are: None Debug Release RelWithDebInfo
-// MinSizeRel ...
-CMAKE_BUILD_TYPE:STRING=
+//No help, variable specified on the command line.
+CMAKE_BUILD_TYPE:STRING=Debug
 
 //CXX compiler
 CMAKE_CXX_COMPILER:STRING=D:/ESP2/Espressif/tools/xtensa-esp32s3-elf/esp-12.2.0_20230208/xtensa-esp32s3-elf/bin/xtensa-esp32s3-elf-g++.exe
@@ -117,8 +116,8 @@ CMAKE_EXE_LINKER_FLAGS_RELEASE:STRING=
 //Flags used by the linker during RELWITHDEBINFO builds.
 CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 
-//Enable/Disable output of compile commands during generation.
-CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=
+//No help, variable specified on the command line.
+CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE
 
 //Value Computed by CMake.
 CMAKE_FIND_PACKAGE_REDIRECTS_DIR:STATIC=D:/vs_code/esp_and_espidf/course-project/build/CMakeFiles/pkgRedirects
@@ -459,8 +458,6 @@ CMAKE_EXE_LINKER_FLAGS_MINSIZEREL-ADVANCED:INTERNAL=1
 CMAKE_EXE_LINKER_FLAGS_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO
 CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: CMAKE_EXPORT_COMPILE_COMMANDS
-CMAKE_EXPORT_COMPILE_COMMANDS-ADVANCED:INTERNAL=1
 //Name of external makefile project generator.
 CMAKE_EXTRA_GENERATOR:INTERNAL=
 //Name of generator.
@@ -569,7 +566,7 @@ C_COMPILER_SUPPORTS_WFORMAT_SIGNEDNESS:INTERNAL=1
 //Details about finding Git
 FIND_PACKAGE_MESSAGE_DETAILS_Git:INTERNAL=[D:/ESP2/Espressif/tools/idf-git/2.39.2/cmd/git.exe][v2.39.2.windows.1()]
 //Details about finding Python3
-FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[D:/ESP2/Espressif/python_env/idf5.1_py3.11_env/Scripts/python.exe][cfound components: Interpreter ][v3.11.2()]
+FIND_PACKAGE_MESSAGE_DETAILS_Python3:INTERNAL=[D:/python/python.exe][cfound components: Interpreter ][v3.12.1()]
 //ADVANCED property for variable: GIT_EXECUTABLE
 GIT_EXECUTABLE-ADVANCED:INTERNAL=1
 //Have include stddef.h
@@ -584,8 +581,9 @@ HAVE_TIME_T_SIZE:INTERNAL=TRUE
 TIME_T_SIZE:INTERNAL=8
 //CMAKE_INSTALL_PREFIX during last run
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=C:/Program Files (x86)/course-project
-_Python3_EXECUTABLE:INTERNAL=D:/ESP2/Espressif/python_env/idf5.1_py3.11_env/Scripts/python.exe
+//Path to a program.
+_Python3_EXECUTABLE:INTERNAL=D:/python/python.exe
 //Python3 Properties
-_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;11;2;32;;;D:\ESP2\Espressif\tools\idf-python\3.11.2\Lib;D:\ESP2\Espressif\tools\idf-python\3.11.2\Lib;D:\ESP2\Espressif\python_env\idf5.1_py3.11_env\Lib\site-packages;D:\ESP2\Espressif\python_env\idf5.1_py3.11_env\Lib\site-packages
-_Python3_INTERPRETER_SIGNATURE:INTERNAL=443ad27b6835f6a1b77ab330486380e3
+_Python3_INTERPRETER_PROPERTIES:INTERNAL=Python;3;12;1;32;;;D:\python\Lib;D:\python\Lib;D:\python\Lib\site-packages;D:\python\Lib\site-packages
+_Python3_INTERPRETER_SIGNATURE:INTERNAL=65d845b4174f4e51f11f700963e29587
 
