@@ -425,115 +425,115 @@
 					"path" : "D:/ESP/components/lwip/port/esp32xx/include/arch"
 				},
 				{
-					"backtrace" : 6,
+					"backtrace" : 5,
 					"path" : "D:/ESP/components/wear_levelling/include"
 				},
 				{
-					"backtrace" : 6,
+					"backtrace" : 5,
 					"path" : "D:/ESP/components/esp_partition/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/sdmmc/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/deprecated"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/analog_comparator/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/dac/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/gpio/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/gptimer/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/i2c/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/i2s/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/ledc/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/mcpwm/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/parlio/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/pcnt/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/rmt/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/sdio_slave/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/sdmmc/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/sigma_delta/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/spi/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/temperature_sensor/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/touch_sensor/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/twai/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/uart/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/usb_serial_jtag/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/driver/touch_sensor/esp32/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/esp_pm/include"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 6,
 					"path" : "D:/ESP/components/esp_ringbuf/include"
 				},
 				{
@@ -565,11 +565,11 @@
 		},
 		{
 			"backtrace" : 5,
-			"id" : "__idf_sdmmc::@89ed5bca1750ffbc7db6"
+			"id" : "__idf_wear_levelling::@cb21b0d7c0815cff11c6"
 		},
 		{
 			"backtrace" : 6,
-			"id" : "__idf_wear_levelling::@cb21b0d7c0815cff11c6"
+			"id" : "__idf_sdmmc::@89ed5bca1750ffbc7db6"
 		}
 	],
 	"id" : "__idf_fatfs::@75ac1d9b25dacc8cc9e7",

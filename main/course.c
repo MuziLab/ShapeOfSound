@@ -1284,7 +1284,7 @@ void app_main(void)
     t_1.length = 8 * 12 * LIGHT_NUMBER + 16;
     t_1.tx_buffer = send_buffer;
     // save_to_flash_uint8(mic_sensitive,sleep_time,sleep_coefficient,gravity_coefficient,light_coefficient);
-    // read_from_flash_uint8(&mic_sensitive, &sleep_time, &sleep_coefficient, &gravity_coefficient, &light_coefficient);
+    read_from_flash_uint8(&mic_sensitive, &sleep_time, &sleep_coefficient, &gravity_coefficient, &light_coefficient);
     xTaskCreate(receive_data_2, "receive_data_2", 8192, NULL, 5, &task_1_1_music_get_number);
     xTaskCreate(shape_of_music, "task_1_music", 8192 * 4, NULL, 5, &task_1_music_show);
     xTaskCreate(lighter, "lighter", 8192, NULL, 5, NULL);
