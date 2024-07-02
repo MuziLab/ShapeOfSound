@@ -801,7 +801,7 @@
 		},
 		{
 			"backtrace" : 0,
-			"id" : "__idf_protocomm::@d76d01c8dec06205e1fc"
+			"id" : "__idf_esp_lcd::@d5a84597e1633c9ab0d3"
 		},
 		{
 			"backtrace" : 0,
@@ -809,11 +809,15 @@
 		},
 		{
 			"backtrace" : 0,
-			"id" : "__idf_esp_lcd::@d5a84597e1633c9ab0d3"
+			"id" : "__idf_esp_local_ctrl::@d6aad58d2946e56208ef"
 		},
 		{
 			"backtrace" : 0,
-			"id" : "__idf_esp_local_ctrl::@d6aad58d2946e56208ef"
+			"id" : "__idf_protocomm::@d76d01c8dec06205e1fc"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_espcoredump::@718b9a7d55ab42cfc0a3"
 		},
 		{
 			"backtrace" : 0,
@@ -821,7 +825,19 @@
 		},
 		{
 			"backtrace" : 0,
-			"id" : "__idf_espcoredump::@718b9a7d55ab42cfc0a3"
+			"id" : "__idf_perfmon::@aac0f647c32bb8f54a67"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_spiffs::@df881b71474064c86689"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_protocol_examples_common::@f775e6a13b1007a4569f"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "__idf_wifi_provisioning::@9d7e7ffe1b15746c1098"
 		},
 		{
 			"backtrace" : 0,
@@ -838,22 +854,6 @@
 		{
 			"backtrace" : 0,
 			"id" : "__idf_mqtt::@c1ab2c6a99226d1f4b56"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_spiffs::@df881b71474064c86689"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_perfmon::@aac0f647c32bb8f54a67"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_protocol_examples_common::@f775e6a13b1007a4569f"
-		},
-		{
-			"backtrace" : 0,
-			"id" : "__idf_wifi_provisioning::@9d7e7ffe1b15746c1098"
 		}
 	],
 	"id" : "__idf_main::@7368607ed66887415643",

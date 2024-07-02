@@ -449,7 +449,8 @@ void change_the_form_and_package_point(RGB_struct target_to_change, int index_of
 
 void lighter(void)
 {
-
+    while (1)
+    {
     RGB_struct *get_data = NULL;
     if (xQueueReceive(Queue_mic, &get_data, portMAX_DELAY) == pdPASS)
     {
@@ -462,7 +463,7 @@ void lighter(void)
         translate(get_data, send_buffer);
         ESP_ERROR_CHECK(spi_device_polling_transmit(spi, &t_1));
         free(get_data);
-
+    }
     }
 }
 void lighter_2(RGB_struct *input_date) // 加队列,不知道可行不
@@ -493,9 +494,10 @@ static void receive_data_2(void *feiaonf)
         if (i2s_channel_read(rx_chan, r_buf, EXAMPLE_BUFF_SIZE * sizeof(uint32_t), &r_bytes, 1000) == ESP_OK)
         {
 
-            if (xQueueSend(Queue_mic, r_buf, portMAX_DELAY) == pdPASS)
+            if (xQueueSend(Queue_mic, &r_buf, portMAX_DELAY) == pdPASS)
             {
                 // 成功发送数据到队列
+                printf("mic发送成功\n");
             }
         }
     }
@@ -525,109 +527,112 @@ void shape_of_music(void)
         {
             // 成功从队列接收数据
             // valueToReceive 现在包含了发送的值
-        }
 
-        for (int i = 0; i < EXAMPLE_BUFF_SIZE; i++)
-        {
-            result[i] = bit_and_32(rec_data[i]);
-        }
-        free(rec_data);
 
-        complex float complex_input[N_SAMPLES] = {0};
-        for (int i = 0; i < N; i++)
-        {
-            complex_input[i] = result[i] * wind[i];
-        }
-        iterative_fft(complex_input, N);
-        float y1_cf[N_SAMPLES / 2] = {0};
-        for (size_t i = 0; i < N / 2; i++)
-        {
-            int middle = 0;
-            y1_cf[i] = 10 * log10f(cabs(complex_input[i]) * cabs(complex_input[i]) / (1024 * 512));
-            if (middle < 0)
+
+            for (int i = 0; i < EXAMPLE_BUFF_SIZE; i++)
             {
-                middle = 0;
+                result[i] = bit_and_32(rec_data[i]);
             }
-        }
+            
 
-        for (int i_1 = 0; i_1 < COLUMN_NUMBER; i_1++)
-        {
-            for (int i = 0; i < SAMPLING_RANGE; i++)
+            complex float complex_input[N_SAMPLES] = {0};
+            for (int i = 0; i < N; i++)
             {
-                if (y1_cf[i + count] > max_db)
+                complex_input[i] = result[i] * wind[i];
+            }
+            iterative_fft(complex_input, N);
+            float y1_cf[N_SAMPLES / 2] = {0};
+            for (size_t i = 0; i < N / 2; i++)
+            {
+                int middle = 0;
+                y1_cf[i] = 10 * log10f(cabs(complex_input[i]) * cabs(complex_input[i]) / (1024 * 512));
+                if (middle < 0)
                 {
-                    max_db = y1_cf[i + count];
+                    middle = 0;
                 }
             }
-            the_end[i_1] = max_db;
-            count = count + SAMPLING_RANGE;
 
-            max_db = 0;
-        }
-    }
-
-    for (size_t i = 0; i < COLUMN_NUMBER; i++)
-    {
-        the_end[i] = (the_end[i]) / 2;
-        // the_end[i] = log10(1+1000*the_end[i]);
-        if (the_end[i] < 0)
-        {
-            the_end[i] = 0;
-        }
-        if (the_end[i] > THE_NUMBER_OF_LIGHTS_IN_EACH_RANGE)
-        {
-            the_end[i] = THE_NUMBER_OF_LIGHTS_IN_EACH_RANGE;
-        } // 注意,getnumber是0-15,代表真实的亮灯数,而后面的index是真实数-1
-    }
-
-    for (size_t i = 0; i < COLUMN_NUMBER; i++)
-    {
-
-        global_change_2(i);                 // change the global color number,to make model changing easily
-        if (the_end[i] > sleep_coefficient) // 判断是否大于系数,如果大,就重置number为零,否则++,当number大到一定值时,便熄灯
-        {
-            sleep_number = 0;
-        }
-        else
-        {
-            sleep_number++;
-        }
-
-        if (sleep_number > (SLEEP_TIME_CO * sleep_time)) // 判断number是否大到一定程度
-        {
-            break;
-        }
-
-        for (size_t light_index_each_line = 0; light_index_each_line < THE_NUMBER_OF_LIGHTS_IN_EACH_RANGE; light_index_each_line++)
-        {
-            if (light_index_each_line < the_end[i])
+            for (int i_1 = 0; i_1 < COLUMN_NUMBER; i_1++)
             {
-                input_data_a_line[light_index_each_line].blue = blue_global[light_index_each_line];
-                input_data_a_line[light_index_each_line].green = green_global[light_index_each_line];
-                input_data_a_line[light_index_each_line].red = red_global[light_index_each_line];
+                for (int i = 0; i < SAMPLING_RANGE; i++)
+                {
+                    if (y1_cf[i + count] > max_db)
+                    {
+                        max_db = y1_cf[i + count];
+                    }
+                }
+                the_end[i_1] = max_db;
+                count = count + SAMPLING_RANGE;
+
+                max_db = 0;
+            }
+
+            for (size_t i = 0; i < COLUMN_NUMBER; i++)
+            {
+                the_end[i] = (the_end[i]) / 2;
+                // the_end[i] = log10(1+1000*the_end[i]);
+                if (the_end[i] < 0)
+                {
+                    the_end[i] = 0;
+                }
+                if (the_end[i] > THE_NUMBER_OF_LIGHTS_IN_EACH_RANGE)
+                {
+                    the_end[i] = THE_NUMBER_OF_LIGHTS_IN_EACH_RANGE;
+                } // 注意,getnumber是0-15,代表真实的亮灯数,而后面的index是真实数-1
+            }
+
+            for (size_t i = 0; i < COLUMN_NUMBER; i++)
+            {
+
+                global_change_2(i);                 // change the global color number,to make model changing easily
+                if (the_end[i] > sleep_coefficient) // 判断是否大于系数,如果大,就重置number为零,否则++,当number大到一定值时,便熄灯
+                {
+                    sleep_number = 0;
+                }
+                else
+                {
+                    sleep_number++;
+                }
+
+                if (sleep_number > (SLEEP_TIME_CO * sleep_time)) // 判断number是否大到一定程度
+                {
+                    break;
+                }
+
+                for (size_t light_index_each_line = 0; light_index_each_line < THE_NUMBER_OF_LIGHTS_IN_EACH_RANGE; light_index_each_line++)
+                {
+                    if (light_index_each_line < the_end[i])
+                    {
+                        input_data_a_line[light_index_each_line].blue = blue_global[light_index_each_line];
+                        input_data_a_line[light_index_each_line].green = green_global[light_index_each_line];
+                        input_data_a_line[light_index_each_line].red = red_global[light_index_each_line];
+                    }
+                    else
+                    {
+                        input_data_a_line[light_index_each_line].blue = 0;
+                        input_data_a_line[light_index_each_line].green = 0;
+                        input_data_a_line[light_index_each_line].red = 0;
+                    }
+                }
+                change_the_form_and_package_line(input_data_a_line, i, input_data_all);
+            }
+            if (sleep_number > (SLEEP_TIME_CO * sleep_time))
+            {
+                task_3();
             }
             else
             {
-                input_data_a_line[light_index_each_line].blue = 0;
-                input_data_a_line[light_index_each_line].green = 0;
-                input_data_a_line[light_index_each_line].red = 0;
+                du_compute(the_end);
+                du_RGB.red = (uint8_t)MIN_LIGHT * light_coefficient;
+                for (size_t i = 0; i < COLUMN_NUMBER; i++)
+                {
+                    change_the_form_and_package_point(du_RGB, i, input_data_all, du[i].x);
+                }
+                lighter_2(input_data_all);
             }
-        }
-        change_the_form_and_package_line(input_data_a_line, i, input_data_all);
-    }
-    if (sleep_number > (SLEEP_TIME_CO * sleep_time))
-    {
-        task_3();
-    }
-    else
-    {
-        du_compute(the_end);
-        du_RGB.red = (uint8_t)MIN_LIGHT * light_coefficient;
-        for (size_t i = 0; i < COLUMN_NUMBER; i++)
-        {
-            change_the_form_and_package_point(du_RGB, i, input_data_all, du[i].x);
-        }
-        lighter_2(input_data_all);
+        }else{printf("没有数据接收\n");}
+        //free(rec_data);
     }
 }
 
@@ -763,7 +768,7 @@ void mode_function(int mode_number)
         memset(x_array, 0, sizeof(x_array));
         memset(y_array, 0, sizeof(y_array));
         coordinate_count = 0;
-        if (xQueueReset(xQueue) != pdPASS)
+        if (xQueueReset(Queue_mic) != pdPASS)
         {
         }
 
@@ -774,7 +779,7 @@ void mode_function(int mode_number)
         vTaskSuspend(task_1_1_music_get_number);
         memset(rgb_store, 0, sizeof(rgb_store));
         task_3();
-        if (xQueueReset(xQueue) != pdPASS)
+        if (xQueueReset(Queue_mic) != pdPASS)
         {
         }
         test_ma();
@@ -791,7 +796,7 @@ void mode_function(int mode_number)
         get_rgb.blue = 15;
         get_rgb.red = 0;
         get_rgb.green = 0;
-        if (xQueueReset(xQueue) != pdPASS)
+        if (xQueueReset(Queue_mic) != pdPASS)
         {
         }
         break;
@@ -1265,8 +1270,9 @@ void app_main(void)
     t_1.tx_buffer = send_buffer;
     // save_to_flash_uint8(mic_sensitive,sleep_time,sleep_coefficient,gravity_coefficient,light_coefficient);
     read_from_flash_uint8(&mic_sensitive, &sleep_time, &sleep_coefficient, &gravity_coefficient, &light_coefficient);
-    xTaskCreate(receive_data_2, "receive_data_2", 8192 * 4, NULL, 5, &task_1_1_music_get_number);
-    xTaskCreate(shape_of_music, "task_1_music", 8192, NULL, 5, &task_1_music_show);
+    xTaskCreate(receive_data_2, "receive_data_2", 1024, NULL, 5, &task_1_1_music_get_number);
+    xTaskCreate(shape_of_music, "task_1_music", 8192 * 4, NULL, 5, &task_1_music_show);
+    xTaskCreate(lighter, "lighter", 8192, NULL, 5, NULL);
     esp_netif_create_default_wifi_sta();
     wifi_connecter();
     touch_task();
