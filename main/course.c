@@ -449,26 +449,28 @@ void change_the_form_and_package_point(RGB_struct target_to_change, int index_of
 
 void lighter(void)
 {
+
     while (1)
     {
-    RGB_struct *get_data = NULL;
-    if (xQueueReceive(Queue_mic, &get_data, portMAX_DELAY) == pdPASS)
-    {
-        vTaskDelay(1 / portTICK_PERIOD_MS);
-        spi_transaction_t t_1 = {
-            .length = 8 * 12 * LIGHT_NUMBER + 16,
-            .tx_buffer = send_buffer,
-        };
+        RGB_struct *get_data = NULL;
+        if (xQueueReceive(Queue_lighter, &get_data, portMAX_DELAY) == pdPASS)
+        {
+            vTaskDelay(1 / portTICK_PERIOD_MS);
+            spi_transaction_t t_1 = {
+                .length = 8 * 12 * LIGHT_NUMBER + 16,
+                .tx_buffer = send_buffer,
+            };
 
-        translate(get_data, send_buffer);
-        ESP_ERROR_CHECK(spi_device_polling_transmit(spi, &t_1));
-        free(get_data);
-    }
+            translate(get_data, send_buffer);
+            ESP_ERROR_CHECK(spi_device_polling_transmit(spi, &t_1));
+            free(get_data);
+            // flash_count--;
+        }
     }
 }
 void lighter_2(RGB_struct *input_date) // 加队列,不知道可行不
 {
-    if (xQueueSend(Queue_mic, &input_date, portMAX_DELAY) == pdPASS)
+    if (xQueueSend(Queue_lighter, &input_date, portMAX_DELAY) == pdPASS)
     {
         // 成功发送队列数据
         // valueToReceive 现在包含了发送的值
@@ -477,7 +479,9 @@ void lighter_2(RGB_struct *input_date) // 加队列,不知道可行不
 
 void task_3(void)
 { /*熄灯*/
-    RGB_struct *send_data = calloc(LIGHT_NUMBER, sizeof(RGB_struct));
+    RGB_struct *send_data = calloc(EXAMPLE_BUFF_SIZE, sizeof(RGB_struct));
+    assert(send_data);
+    // flash_count++;
     lighter_2(send_data);
 }
 
@@ -490,14 +494,13 @@ static void receive_data_2(void *feiaonf)
     while (1)
     {
         uint32_t *r_buf = calloc(EXAMPLE_BUFF_SIZE, sizeof(uint32_t));
+        // flash_count++;
         assert(r_buf); // Check if r_buf allocation success
         if (i2s_channel_read(rx_chan, r_buf, EXAMPLE_BUFF_SIZE * sizeof(uint32_t), &r_bytes, 1000) == ESP_OK)
         {
 
             if (xQueueSend(Queue_mic, &r_buf, portMAX_DELAY) == pdPASS)
             {
-                // 成功发送数据到队列
-                printf("mic发送成功\n");
             }
         }
     }
@@ -507,9 +510,8 @@ void shape_of_music(void)
 {
     int16_t result[1024];
     blackman_window(wind, N);
-    RGB_struct *input_data_all = calloc(LIGHT_NUMBER, sizeof(RGB_struct));
+
     RGB_struct input_data_a_line[THE_NUMBER_OF_LIGHTS_IN_EACH_RANGE] = {0};
-    uint32_t *rec_data = NULL;
     float difference[COLUMN_NUMBER] = {0};
     RGB_struct du_RGB;
 
@@ -518,23 +520,27 @@ void shape_of_music(void)
     int sleep_number = 0;
 
     int the_end[16] = {0};
-    int count = SAMPLING_RANGE;
     float max_db = 0;
+    float y1_cf[N_SAMPLES / 2] = {0};
     while (1)
     {
+        int count = SAMPLING_RANGE;
+        RGB_struct *input_data_all = calloc(EXAMPLE_BUFF_SIZE, sizeof(RGB_struct));
+        // flash_count++;
 
+        assert(input_data_all);
+        uint32_t *rec_data = NULL;
         if (xQueueReceive(Queue_mic, &rec_data, portMAX_DELAY) == pdPASS)
         {
             // 成功从队列接收数据
             // valueToReceive 现在包含了发送的值
 
-
-
             for (int i = 0; i < EXAMPLE_BUFF_SIZE; i++)
             {
                 result[i] = bit_and_32(rec_data[i]);
             }
-            
+            free(rec_data);
+            // flash_count--;
 
             complex float complex_input[N_SAMPLES] = {0};
             for (int i = 0; i < N; i++)
@@ -542,7 +548,6 @@ void shape_of_music(void)
                 complex_input[i] = result[i] * wind[i];
             }
             iterative_fft(complex_input, N);
-            float y1_cf[N_SAMPLES / 2] = {0};
             for (size_t i = 0; i < N / 2; i++)
             {
                 int middle = 0;
@@ -619,6 +624,9 @@ void shape_of_music(void)
             }
             if (sleep_number > (SLEEP_TIME_CO * sleep_time))
             {
+                free(input_data_all);
+                RGB_struct *input_data_all = calloc(EXAMPLE_BUFF_SIZE, sizeof(RGB_struct)); // 所有灯的要输入的信息
+                                                                                            // flash_count--;
                 task_3();
             }
             else
@@ -631,14 +639,19 @@ void shape_of_music(void)
                 }
                 lighter_2(input_data_all);
             }
-        }else{printf("没有数据接收\n");}
-        //free(rec_data);
+        }
+        else
+        {
+            printf("没有数据接收\n");
+        }
     }
 }
 
 void task_2(int *x, int *y, int length_of_x)
 {
-    RGB_struct *input_data_all = calloc(LIGHT_NUMBER, sizeof(RGB_struct)); // 所有灯的要输入的信息
+    RGB_struct *input_data_all = calloc(EXAMPLE_BUFF_SIZE, sizeof(RGB_struct)); // 所有灯的要输入的信息
+                                                                                // flash_count++;
+    assert(input_data_all);
     RGB_struct du_RGB;
     du_RGB.red = (uint8_t)MIN_LIGHT * light_coefficient;
     du_RGB.blue = 0;
@@ -659,7 +672,9 @@ void task_2(int *x, int *y, int length_of_x)
 
 void task_4(int *x, int *y, int length_of_x, RGB_struct *rgb_input)
 {
-    RGB_struct *input_data_all = calloc(LIGHT_NUMBER, sizeof(RGB_struct)); // 所有灯的要输入的信息
+    RGB_struct *input_data_all = calloc(EXAMPLE_BUFF_SIZE, sizeof(RGB_struct)); // 所有灯的要输入的信息
+                                                                                // flash_count++;
+    assert(input_data_all);
     for (size_t i = 0; i < length_of_x; i++)
     {
         if (y[i] < 0 || x[i] < 0)
@@ -1261,16 +1276,16 @@ void app_main(void)
     ESP_ERROR_CHECK(esp_event_loop_create_default());
 
     i2s_example_init_std_duplex();
-    Queue_lighter = xQueueCreate(10, sizeof(RGB_struct *));
-    Queue_mic = xQueueCreate(10, sizeof(uint32_t *));
+    Queue_lighter = xQueueCreate(1, sizeof(uint32_t *));
+    Queue_mic = xQueueCreate(1, sizeof(uint32_t *));
 
     send_buffer = calloc(LIGHT_NUMBER + 1, 12);
     spi = spi_initialize();
     t_1.length = 8 * 12 * LIGHT_NUMBER + 16;
     t_1.tx_buffer = send_buffer;
     // save_to_flash_uint8(mic_sensitive,sleep_time,sleep_coefficient,gravity_coefficient,light_coefficient);
-    read_from_flash_uint8(&mic_sensitive, &sleep_time, &sleep_coefficient, &gravity_coefficient, &light_coefficient);
-    xTaskCreate(receive_data_2, "receive_data_2", 1024, NULL, 5, &task_1_1_music_get_number);
+    // read_from_flash_uint8(&mic_sensitive, &sleep_time, &sleep_coefficient, &gravity_coefficient, &light_coefficient);
+    xTaskCreate(receive_data_2, "receive_data_2", 8192, NULL, 5, &task_1_1_music_get_number);
     xTaskCreate(shape_of_music, "task_1_music", 8192 * 4, NULL, 5, &task_1_music_show);
     xTaskCreate(lighter, "lighter", 8192, NULL, 5, NULL);
     esp_netif_create_default_wifi_sta();
