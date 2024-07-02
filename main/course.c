@@ -60,25 +60,20 @@ int tick_1 = 0;
 bool wifi_state =false;
 //每次触摸时看是否为true,是就不再连接,否就尝试连接,连接时看try是否超标,超标就不再进行,并且把try归零.加载状态就看wifi_state和trytime.有一个符合就break
 
-#define EXAMPLE_STD_BCLK_IO1 GPIO_NUM_4 // i2s
-#define EXAMPLE_STD_WS_IO1 GPIO_NUM_5   
-#define EXAMPLE_STD_DOUT_IO1 GPIO_NUM_6
-#define EXAMPLE_STD_DIN_IO1 GPIO_NUM_7 
+#define EXAMPLE_STD_BCLK_IO1 GPIO_NUM_25 // i2s
+#define EXAMPLE_STD_WS_IO1 GPIO_NUM_26   
+#define EXAMPLE_STD_DOUT_IO1 GPIO_NUM_27
+#define EXAMPLE_STD_DIN_IO1 GPIO_NUM_14 
 
 
 static const char *TAG = "example";
-#define ssid_1  "realme GT5"
+#define ssid_1  "muzi"
 #define password_1 "88888888"//wifi
 
 
 #define WIFI_CONNECTED_BIT BIT0//静态ip所需
 #define WIFI_FAIL_BIT      BIT1
 static EventGroupHandle_t s_wifi_event_group;
-#define EXAMPLE_STATIC_IP_ADDR "192.168.157.227"
-#define EXAMPLE_STATIC_NETMASK_ADDR "255.255.255.0"
-#define EXAMPLE_STATIC_GW_ADDR "192.168.157.202"
-#define EXAMPLE_MAIN_DNS_SERVER "8.8.8.8"
-#define EXAMPLE_BACKUP_DNS_SERVER "8.8.4.4"
 
 #define WIFI_CONNECT_TIMES 3//wifi重连次数
 static int s_retry_num = 0;//static,之后再看
@@ -102,7 +97,7 @@ uint8_t gravity_coefficient = 1;
 #define EEPROM_HOST SPI2_HOST
 
 #define PIN_NUM_MISO -1
-#define PIN_NUM_MOSI 15
+#define PIN_NUM_MOSI GPIO_NUM_12
 #define PIN_NUM_CLK -1
 #define PIN_NUM_CS -1
 
@@ -252,9 +247,11 @@ static void i2s_example_init_std_duplex(void)
                 .ws_width = 32,
                 .ws_pol = false,
                 .bit_shift = true,
-                .left_align = true,
-                .big_endian = false,
-                .bit_order_lsb = false},
+                .msb_right =false,
+                 //.left_align = true,
+               // .big_endian = false,
+                //.bit_order_lsb = false
+                },
         .slot_cfg.slot_mask = I2S_STD_SLOT_LEFT,
         .gpio_cfg = {
             .mclk = I2S_GPIO_UNUSED, // some codecs may require mclk signal, this example doesn't need it
@@ -266,7 +263,7 @@ static void i2s_example_init_std_duplex(void)
                 .mclk_inv = false,
                 .bclk_inv = false,
                 .ws_inv = false,
-            },
+        },
         },
     };
     /* Initialize the channels */
@@ -282,6 +279,12 @@ static int16_t bit_and(uint8_t byte_1, uint8_t byte_2, uint8_t byte_3)
     result = result >> (16 - mic_sensitive);                           // 右移16位,舍弃了原始数据的低八位,这里可以改变灵敏的,但是太灵敏应该会出现超过数据存储极限长度,导致之后的计算出问题
     int16_t result_1 = (int16_t)result;
     return result_1;
+}
+
+static int16_t bit_and_32(uint32_t input){
+    int32_t middle = (int)input;
+    middle = middle>>(16-mic_sensitive);
+    return middle;
 }
 
 static void loud_change(uint8_t* byte_1, uint8_t* byte_2, uint8_t* byte_3)
@@ -356,7 +359,7 @@ static void receive_data_2(void *feiaonf)
 {
     ESP_ERROR_CHECK(i2s_channel_enable(rx_chan));
     ESP_ERROR_CHECK(i2s_channel_enable(tx_chan));
-    uint8_t *r_buf = calloc(3 * EXAMPLE_BUFF_SIZE, sizeof(uint8_t));
+    uint32_t *r_buf = calloc(EXAMPLE_BUFF_SIZE, sizeof(uint32_t));
     int16_t result[1024];
     assert(r_buf); // Check if r_buf allocation success
     blackman_window(wind, N);
@@ -365,15 +368,20 @@ static void receive_data_2(void *feiaonf)
     while (1)
     {
 
-        if (i2s_channel_read(rx_chan, r_buf, 3 * EXAMPLE_BUFF_SIZE * sizeof(uint8_t), &r_bytes, 1000) == ESP_OK)
+        if (i2s_channel_read(rx_chan, r_buf, EXAMPLE_BUFF_SIZE *sizeof(uint32_t), &r_bytes, 1000) == ESP_OK)
         {
             
-            for (int i = 0; i < 3 * EXAMPLE_BUFF_SIZE; i += 3)
+            // for (int i = 0; i < 3 * EXAMPLE_BUFF_SIZE; i += 3)
+            // {
+            //     result[i / 3] = bit_and(r_buf[i + 2], r_buf[i + 1], r_buf[i]);
+            //     //loud_change(&r_buf[i+2],&r_buf[i + 1], &r_buf[i]);
+            // }
+            for (int i = 0; i < EXAMPLE_BUFF_SIZE; i ++)
             {
-                result[i / 3] = bit_and(r_buf[i + 2], r_buf[i + 1], r_buf[i]);
-                loud_change(&r_buf[i+2],&r_buf[i + 1], &r_buf[i]);
+                result[i] = bit_and_32(r_buf[i]);
+                //loud_change(&r_buf[i+2],&r_buf[i + 1], &r_buf[i]);
             }
-            i2s_channel_write(tx_chan, r_buf, 3 * EXAMPLE_BUFF_SIZE * sizeof(uint8_t), &r_bytes, 1000);
+            //i2s_channel_write(tx_chan, r_buf, 3 * EXAMPLE_BUFF_SIZE * sizeof(uint8_t), &r_bytes, 1000);
             complex float complex_input[N_SAMPLES] = {0};
             for (int i = 0; i < N; i++)
             {
@@ -520,20 +528,20 @@ void change_the_form_and_package_point(RGB_struct target_to_change, int index_of
 
 }
 
-void lighter(RGB_struct *input_date)
+// void lighter(RGB_struct *input_date)
+// {
+
+//     spi_transaction_t t_1 = {
+//         .length = 8 * 12 * LIGHT_NUMBER + 16,
+//         .tx_buffer = send_buffer,
+//     };
+
+//     translate(input_date, send_buffer);
+//     ESP_ERROR_CHECK(spi_device_transmit(spi, &t_1));
+// }
+void lighter_2(RGB_struct *input_date)//加队列,不知道可行不
 {
-
-    spi_transaction_t t_1 = {
-        .length = 8 * 12 * LIGHT_NUMBER + 16,
-        .tx_buffer = send_buffer,
-    };
-
-    translate(input_date, send_buffer);
-    ESP_ERROR_CHECK(spi_device_transmit(spi, &t_1));
-}
-void lighter_2(RGB_struct *input_date)//轮询传输
-{
-
+    vTaskDelay(1/portTICK_PERIOD_MS);
     spi_transaction_t t_1 = {
         .length = 8 * 12 * LIGHT_NUMBER + 16,
         .tx_buffer = send_buffer,
@@ -569,6 +577,7 @@ void shape_of_music(void)
             // 成功从队列接收数据
             // valueToReceive 现在包含了发送的值
         }
+        
         for (size_t i = 0; i < COLUMN_NUMBER; i++)
         {   
             get_number[i] = (get_number[i]) / 2;
@@ -582,6 +591,7 @@ void shape_of_music(void)
                 get_number[i] = THE_NUMBER_OF_LIGHTS_IN_EACH_RANGE;
             } // 注意,getnumber是0-15,代表真实的亮灯数,而后面的index是真实数-1
         }
+        
         for (size_t i = 0; i < COLUMN_NUMBER; i++)
         {
 
@@ -630,7 +640,7 @@ void shape_of_music(void)
         {
             change_the_form_and_package_point(du_RGB, i, input_data_all, du[i].x);
         }
-        lighter(input_data_all);
+        lighter_2(input_data_all);
         }
         free(get_number);
     }
@@ -655,13 +665,10 @@ void task_2(int*x,int*y,int length_of_x)
             RGB_struct input_data_all[LIGHT_NUMBER] = {0};
             break;
         }
-        //printf("%d||%d***************\n",x[i],y[i]);
         change_the_form_and_package_point(du_RGB, x[i], input_data_all, y[i]);
     }
     
-
     lighter_2(input_data_all);
-    //printf("\n");
 }
 
 void task_4(int*x,int*y,int length_of_x,RGB_struct*rgb_input)
@@ -848,7 +855,6 @@ static void recv_from_android(const int sock)
             ESP_LOGW(TAG, "Connection closed");
         } else {
             rx_buffer[len] = 0; // str的结束标志,将所有发来的东西用str处理,这样方便管理
-            printf(rx_buffer);
             for (size_t i = 0; i < len; i++)
             {   
                 if (rx_buffer[i]=='M')
@@ -877,7 +883,6 @@ static void recv_from_android(const int sock)
                        sleep_coefficient = rx_buffer[i+3]-90;
                        gravity_coefficient = rx_buffer[i+4]-90;
                        save_to_flash_uint8(mic_sensitive,sleep_time,sleep_coefficient,gravity_coefficient,light_coefficient);
-                       printf("%d\n",light_coefficient);
                         }
                     if(rx_buffer[i]=='B'){
                        mic_sensitive = rx_buffer[i+1]-90;
@@ -975,9 +980,6 @@ static void recv_from_android(const int sock)
 
                     break;  
                 
-
-
-                
                 default:
                     break;
                 }
@@ -987,6 +989,34 @@ static void recv_from_android(const int sock)
             
     }
     }while (len>0);
+}
+
+
+char ip_addr[16];
+
+
+static void tcp_cilent_task()
+{
+    int sock = 0;
+    struct sockaddr_in server_addr;
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_addr.s_addr = inet_addr(ip_addr);
+    server_addr.sin_port = htons(12345);
+
+    while (1)
+    {   
+        sock =  socket(AF_INET, SOCK_STREAM, 0);
+        int err = connect(sock, (struct sockaddr *)&server_addr, sizeof(ip_addr));
+        if (err == 0)
+        {
+            printf("tcp连接成功\n");
+            break;
+        }
+        vTaskDelay(100);
+        printf("出错了\n");
+        close(sock);//关闭它
+    }
+    recv_from_android(sock);
 }
 
 
@@ -1079,42 +1109,16 @@ CLEAN_UP://汇编里的goto,稀罕物啊
 }
 
 
-static esp_err_t example_set_dns_server(esp_netif_t *netif, uint32_t addr, esp_netif_dns_type_t type)
-{
-    if (addr && (addr != IPADDR_NONE)) {
-        esp_netif_dns_info_t dns;
-        dns.ip.u_addr.ip4.addr = addr;
-        dns.ip.type = IPADDR_TYPE_V4;
-        ESP_ERROR_CHECK(esp_netif_set_dns_info(netif, type, &dns));
-    }
-    return ESP_OK;
+
+
+
+
+
+
+void get_ip_str(const ip4_addr_t *ip, char *ip_str, size_t max_len) {
+    //用于将ip地址转为字符串
+    snprintf(ip_str, max_len, IPSTR, IP2STR(ip));
 }
-
-
-
-
-
-static void example_set_static_ip(esp_netif_t *netif)
-{
-    if (esp_netif_dhcpc_stop(netif) != ESP_OK) {
-        ESP_LOGE(TAG, "Failed to stop dhcp client");
-        return;
-    }
-    esp_netif_ip_info_t ip;
-    memset(&ip, 0 , sizeof(esp_netif_ip_info_t));
-    ip.ip.addr = ipaddr_addr(EXAMPLE_STATIC_IP_ADDR);
-    ip.netmask.addr = ipaddr_addr(EXAMPLE_STATIC_NETMASK_ADDR);
-    ip.gw.addr = ipaddr_addr(EXAMPLE_STATIC_GW_ADDR);
-    if (esp_netif_set_ip_info(netif, &ip) != ESP_OK) {
-        ESP_LOGE(TAG, "Failed to set ip info");
-        return;
-    }
-    ESP_LOGD(TAG, "Success to set static ip: %s, netmask: %s, gw: %s", EXAMPLE_STATIC_IP_ADDR, EXAMPLE_STATIC_NETMASK_ADDR, EXAMPLE_STATIC_GW_ADDR);
-    ESP_ERROR_CHECK(example_set_dns_server(netif, ipaddr_addr(EXAMPLE_MAIN_DNS_SERVER), ESP_NETIF_DNS_MAIN));
-    ESP_ERROR_CHECK(example_set_dns_server(netif, ipaddr_addr(EXAMPLE_BACKUP_DNS_SERVER), ESP_NETIF_DNS_BACKUP));
-}
-
-
 
 //连接时设置一个动画,就是马天洋的动画,在按下按钮的同时,进行wifi连接和动画播放,每次放完一次动画查一下连接次数,如果是0就不放动画了,否则就放
 void call_back(void* event_handler_arg,esp_event_base_t event_base,int32_t event_id,void* event_data)
@@ -1142,18 +1146,19 @@ void call_back(void* event_handler_arg,esp_event_base_t event_base,int32_t event
     if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP)
     {
         printf("连接成功\n");
+        ip_event_got_ip_t *gw_add = event_data;
         wifi_state = true;
         try_time = 0;
         tick_1 = 1;
-        xTaskCreate(tcp_server_task, "tcp_server", 4096, (void*)AF_INET, 5, NULL);
+        get_ip_str(&gw_add->ip_info.gw, ip_addr, sizeof(ip_addr));
+        //printf("%s\n",ip_addr);
+        xTaskCreate(tcp_cilent_task, "tcp_client", 4096, (void*)AF_INET, 5, NULL);
     }
 }
 
 
 void wifi_connecter(void)/////这个函数实现了连接wifi的功能
 {
-
-    
     //一些初始化的函数，包括事件循环的启用；但是不负责链接wifi,有官方函数链接
     ///////////////////////////////////
     /*事件*/
@@ -1178,134 +1183,106 @@ void wifi_connecter(void)/////这个函数实现了连接wifi的功能
 }
 
 
-
-static QueueHandle_t que_touch = NULL;
-typedef struct touch_msg
-{
-    touch_pad_intr_mask_t intr_mask;
-    uint32_t pad_num;
-    uint32_t pad_status;
-    uint32_t pad_val;
-} touch_event_t;
-int light = 0;
-int mode_state = -1; // 1代表进入了模式选择,1-10代表不同模式,0代表进入判断是否误触模式,-1代表悬空
-
-#define MODE_LINE 1
-#define TOUCH_BUTTON_NUM 2
-#define SENSITIVITY 1000
-static const touch_pad_t button[TOUCH_BUTTON_NUM] = {
-    TOUCH_PAD_NUM1, // 'SELECT' button.
-    TOUCH_PAD_NUM2, // 'MENU' button.
-};
+#define TOUCH_THRESH_NO_USE   (0)
+#define TOUCH_THRESH_PERCENT  (80)
+#define TOUCHPAD_FILTER_TOUCH_PERIOD (10)
 
 
-static void touchsensor_interrupt_cb(void *arg)
-{
-    int task_awoken = pdFALSE;
-    touch_event_t evt;
+static bool s_pad_activated[2];//中断用
+static uint32_t s_pad_init_val[2];//
 
-    evt.intr_mask = touch_pad_read_intr_status_mask();
-    evt.pad_status = touch_pad_get_status();
-    evt.pad_num = touch_pad_get_current_meas_channel();
-
-    xQueueSendFromISR(que_touch, &evt, &task_awoken);
-    if (task_awoken == pdTRUE)
-    {
-        portYIELD_FROM_ISR();//这个是切换上面的中断任务为其他任务用的
-    };
-}
 
 static void tp_example_set_thresholds(void)
 {
-    for (int i = 0; i < TOUCH_BUTTON_NUM; i++)
-    {
-        touch_pad_set_thresh(button[i], SENSITIVITY);
-    }
-}
+    uint16_t touch_value;
+    for (int i = 0; i < 2; i++) {
+        //read filtered value
+        touch_pad_read_filtered(i, &touch_value);
+        s_pad_init_val[i] = touch_value;
+        ESP_LOGI(TAG, "test init: touch pad [%d] val is %d", i, touch_value);
+        //set interrupt threshold.
+        ESP_ERROR_CHECK(touch_pad_set_thresh(i, touch_value * 2 / 3));
 
-static void touchsensor_filter_set(touch_filter_mode_t mode)
-{
-    /* Filter function */
-    touch_filter_config_t filter_info = {
-        .mode = mode,      // Test jitter and filter 1/4.
-        .debounce_cnt = 1, // 1 time count.
-        .noise_thr = 0,    // 50%
-        .jitter_step = 4,  // use for jitter mode.
-        .smh_lvl = TOUCH_PAD_SMOOTH_IIR_2,
-    };
-    touch_pad_filter_set_config(&filter_info);
-    touch_pad_filter_enable();
+    }
 }
 
 static void tp_example_read_task(void *pvParameter)
 {
-    touch_event_t evt = {0};
-    /* Wait touch sensor init done */
-    vTaskDelay(50 / portTICK_PERIOD_MS);
-    tp_example_set_thresholds();
-
-    while (1)
-    {
-        int ret = xQueueReceive(que_touch, &evt, (TickType_t)portMAX_DELAY);//从队列中获取信息(这个队列在按钮触发时发送信息)
-        if (ret != pdTRUE)
-        {
-            continue;
-        }
-        if (evt.intr_mask & TOUCH_PAD_INTR_MASK_ACTIVE)//一个按钮被激活
-        {
-            if (evt.pad_num == MODE_LINE)//判断触发的是哪个按钮
-            {   
+    static int show_message;
+    while (1) {
+            //interrupt mode, enable touch interrupt
+            touch_pad_intr_enable();
+            for (int i = 0; i < 2; i++) {
+                if (s_pad_activated[i] == true) {
+                    
                 if (wifi_state!=true)
                 {
                     esp_wifi_connect();
                     mode_function(3);
                 }
 
-                
-                
-            }
-        }
 
-        if (evt.intr_mask & TOUCH_PAD_INTR_MASK_INACTIVE)//一个按钮没被激活??
-        {
-            // printf("TouchSensor [%" PRIu32 "] be inactivated, status mask 0x%" PRIu32"\n", evt.pad_num, evt.pad_status);
-        }
-    };
+                    // Wait a while for the pad being released
+                    vTaskDelay(200 / portTICK_PERIOD_MS);
+                    // Clear information on pad activation
+                    s_pad_activated[i] = false;
+                    // Reset the counter triggering a message
+                    // that application is running
+                    show_message = 1;
+                }
+            }
+
+        vTaskDelay(10 / portTICK_PERIOD_MS);
+    }
 }
 
-void touch_function(void)
+/*
+  Handle an interrupt triggered when a pad is touched.
+  Recognize what pad has been touched and save it in a table.
+ */
+static void tp_example_rtc_intr(void *arg)
 {
-    if (que_touch == NULL)
-    {
-        que_touch = xQueueCreate(TOUCH_BUTTON_NUM, sizeof(touch_event_t));
+    uint32_t pad_intr = touch_pad_get_status();
+    //clear interrupt
+    touch_pad_clear_status();
+    for (int i = 0; i < 2; i++) {
+        if ((pad_intr >> i) & 0x01) {
+            s_pad_activated[i] = true;
+        }
     }
-    touch_pad_init();
-    for (int i = 0; i < TOUCH_BUTTON_NUM; i++)
-    {
-        touch_pad_config(button[i]);
+}
+
+/*
+ * Before reading touch pad, we need to initialize the RTC IO.
+ */
+static void tp_example_touch_pad_init(void)
+{
+    for (int i = 0; i < 2; i++) {
+        //init RTC IO and mode for touch pad.
+        touch_pad_config(i, TOUCH_THRESH_NO_USE);
     }
+}
 
-    /* Denoise setting at TouchSensor 0. */
-    touch_pad_denoise_t denoise = {
-        /* The bits to be cancelled are determined according to the noise level. */
-        .grade = TOUCH_PAD_DENOISE_BIT4,
-        /* By adjusting the parameters, the reading of T0 should be approximated to the reading of the measured channel. */
-        .cap_level = TOUCH_PAD_DENOISE_CAP_L4,
-    };
-    touch_pad_denoise_set_config(&denoise);
-    touch_pad_denoise_enable();
-    /* Filter setting */
-    touchsensor_filter_set(TOUCH_PAD_FILTER_IIR_16);
-    touch_pad_timeout_set(true, TOUCH_PAD_THRESHOLD_MAX);
-    /* Register touch interrupt ISR, enable intr type. */
-    touch_pad_isr_register(touchsensor_interrupt_cb, NULL, TOUCH_PAD_INTR_MASK_ALL);
-    /* If you have other touch algorithm, you can get the measured value after the `TOUCH_PAD_INTR_MASK_SCAN_DONE` interrupt is generated. */
-    touch_pad_intr_enable(TOUCH_PAD_INTR_MASK_ACTIVE | TOUCH_PAD_INTR_MASK_INACTIVE | TOUCH_PAD_INTR_MASK_TIMEOUT);
 
-    /* Enable touch sensor clock. Work mode is "timer trigger". */
+void touch_task(void)
+{
+    // Initialize touch pad peripheral, it will start a timer to run a filter
+    ESP_LOGI(TAG, "Initializing touch pad");
+    ESP_ERROR_CHECK(touch_pad_init());
+    // If use interrupt trigger mode, should set touch sensor FSM mode at 'TOUCH_FSM_MODE_TIMER'.
     touch_pad_set_fsm_mode(TOUCH_FSM_MODE_TIMER);
-    touch_pad_fsm_start();
-
+    // Set reference voltage for charging/discharging
+    // For most usage scenarios, we recommend using the following combination:
+    // the high reference valtage will be 2.7V - 1V = 1.7V, The low reference voltage will be 0.5V.
+    touch_pad_set_voltage(TOUCH_HVOLT_2V7, TOUCH_LVOLT_0V5, TOUCH_HVOLT_ATTEN_1V);
+    // Init touch pad IO
+    tp_example_touch_pad_init();
+    // Initialize and start a software filter to detect slight change of capacitance.
+    touch_pad_filter_start(TOUCHPAD_FILTER_TOUCH_PERIOD);
+    // Set thresh hold
+    tp_example_set_thresholds();
+    // Register touch interrupt ISR
+    touch_pad_isr_register(tp_example_rtc_intr, NULL);
     // Start a task to show what pads have been touched
     xTaskCreate(&tp_example_read_task, "touch_pad_read_task", 4096, NULL, 5, NULL);
 }
@@ -1335,7 +1312,10 @@ void app_main(void)
     xTaskCreate(shape_of_music, "task_1_music", 8192, NULL, 5, &task_1_music_show);
     esp_netif_create_default_wifi_sta();
     wifi_connecter();
-    touch_function();
+    touch_task();
     
 }
+
+
+
 

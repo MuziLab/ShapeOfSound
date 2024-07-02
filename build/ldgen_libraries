@@ -58,9 +58,6 @@ D:/vs_code/esp_and_espidf/course-project/build/esp-idf/json/libjson.a
 D:/vs_code/esp_and_espidf/course-project/build/esp-idf/mqtt/libmqtt.a
 D:/vs_code/esp_and_espidf/course-project/build/esp-idf/perfmon/libperfmon.a
 D:/vs_code/esp_and_espidf/course-project/build/esp-idf/spiffs/libspiffs.a
-D:/vs_code/esp_and_espidf/course-project/build/esp-idf/touch_element/libtouch_element.a
-D:/vs_code/esp_and_espidf/course-project/build/esp-idf/ulp/libulp.a
-D:/vs_code/esp_and_espidf/course-project/build/esp-idf/usb/libusb.a
 D:/vs_code/esp_and_espidf/course-project/build/esp-idf/wifi_provisioning/libwifi_provisioning.a
 D:/vs_code/esp_and_espidf/course-project/build/esp-idf/main/libmain.a
 D:/vs_code/esp_and_espidf/course-project/build/esp-idf/protocol_examples_common/libprotocol_examples_common.a
