@@ -349,6 +349,7 @@ void blackman_window(float *window, int N)
 int N = N_SAMPLES;
 float wind[N_SAMPLES];
 
+
 static const uint16_t table[16] = {
     0x1111, 0x7111, 0x1711, 0x7711, 0x1171, 0x7171, 0x1771, 0x7771,
     0x1117, 0x7117, 0x1717, 0x7717, 0x1177, 0x7177, 0x1777, 0x7777};
@@ -465,6 +466,7 @@ void lighter(void)
             ESP_ERROR_CHECK(spi_device_polling_transmit(spi, &t_1));
             free(get_data);
             // flash_count--;
+            // printf("发送了\n");
         }
     }
 }
