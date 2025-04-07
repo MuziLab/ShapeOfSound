@@ -10,3 +10,6 @@
 3. 可以通过手机进行模式切换，在模式二中可以用多种方法精确控制点阵屏幕
 4. 演示视频：```https://www.bilibili.com/video/BV17WRkYfEVj/```
 5. 上位app：```https://github.com/MuziLab/control_app```
+## 目前发现问题
+1. 代码能跑但粗糙，没有模块化导致所有代码挤在一个文件中，另有许多无用代码和warning，但是能跑，而且基本没大bug
+2. 通信方式由于之前为了学习选择了tcp，其实用mqtt或者蓝牙会更好，另tcp通信时没有处理好服务器断连问题，可能会导致问题
