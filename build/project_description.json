@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "course-project",
-    "project_version":    "c1aa29d-dirty",
+    "project_version":    "854cd17-dirty",
     "project_path":       "C:/Users/33746/Desktop/graduation/course_project/course-project",
     "idf_path":           "C:/file_for_app/Espressif/frameworks/esp-idf-v5.1.6",
     "build_dir":          "C:/Users/33746/Desktop/graduation/course_project/course-project/build",

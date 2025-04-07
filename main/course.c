@@ -57,10 +57,12 @@ int tick_1 = 0;
 bool wifi_state = false;
 // 每次触摸时看是否为true,是就不再连接,否就尝试连接,连接时看try是否超标,超标就不再进行,并且把try归零.加载状态就看wifi_state和trytime.有一个符合就break
 
-#define EXAMPLE_STD_BCLK_IO1 GPIO_NUM_25 // i2s
-#define EXAMPLE_STD_WS_IO1 GPIO_NUM_26
-#define EXAMPLE_STD_DOUT_IO1 GPIO_NUM_27
-#define EXAMPLE_STD_DIN_IO1 GPIO_NUM_14
+#define EXAMPLE_STD_BCLK_IO1 GPIO_NUM_18 // i2s
+#define EXAMPLE_STD_WS_IO1 GPIO_NUM_19
+#define EXAMPLE_STD_DOUT_IO1 GPIO_NUM_21
+#define EXAMPLE_STD_DIN_IO1 GPIO_NUM_5
+#define L_R_GPIO GPIO_NUM_21
+#define L_R_GPIO_PIN_SEL (1ULL << L_R_GPIO) // 配置GPIO_OUT位寄存器
 
 static const char *TAG = "example";
 #define ssid_1 "muzi"
@@ -348,7 +350,6 @@ void blackman_window(float *window, int N)
 #define N_SAMPLES 1024
 int N = N_SAMPLES;
 float wind[N_SAMPLES];
-
 
 static const uint16_t table[16] = {
     0x1111, 0x7111, 0x1711, 0x7711, 0x1171, 0x7171, 0x1771, 0x7771,
@@ -1266,8 +1267,21 @@ void touch_task(void)
     xTaskCreate(&tp_example_read_task, "touch_pad_read_task", 4096, NULL, 5, NULL);
 }
 
-void app_main(void)
+void l_r_set(void)
 {
+    gpio_config_t l_r_config; // GPIO 通用配置。
+    l_r_config.pin_bit_mask = L_R_GPIO_PIN_SEL;
+    l_r_config.mode = GPIO_MODE_OUTPUT;           // 设置GPIO为输出模式
+    l_r_config.pull_up_en = GPIO_PULLUP_DISABLE;  // 禁用GPIO上拉电阻                                        
+    l_r_config.pull_down_en = GPIO_PULLUP_ENABLE; // 启用 GPIO 下拉电阻                            
+    l_r_config.intr_type = GPIO_INTR_DISABLE; // 禁止中断
+    gpio_config(&l_r_config);
+    gpio_set_level(L_R_GPIO, 1); 
+}
+
+void app_main(void)
+{   
+    l_r_set();
     esp_err_t ret = nvs_flash_init();
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
     {
